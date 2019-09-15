@@ -71,23 +71,6 @@ public class SignUpActivity extends BaseActivity {
     }//End init()
 
 
-//    private void initToolbar() {
-//        /**
-//         * init toolbar
-//         */
-//        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.signup_toolbar);
-//        setSupportActionBar(toolbar);
-//        setTitle(getString(R.string.sign_up));
-//        toolbar.setNavigationIcon(R.drawable.back_arrow);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }//End onClick()
-//        });
-//
-//    }//End initToolbar()
-
 
     public void executeSignUp() {
 

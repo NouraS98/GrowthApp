@@ -22,23 +22,6 @@ public class BaseActivity extends AppCompatActivity {
 
     }//end onCreate()
 
-    /* private void handleDefaultAppLocale() {
-         setAppLocale(MySharedPrefrance.getString(this, Constants.Keys.APP_LANGUAGE, getSystemLocalLanguage()));
-
-     }//end handleDefaultAppLocale()
-
-     private void setAppLocale(String app_language) {
-         //set new lang pref
-         MySharedPrefrance.putString(this, Constants.Keys.APP_LANGUAGE, app_language);
-         //change lang configuration
-         Locale locale = new Locale(app_language);
-         Locale.setDefault(locale);
-         Configuration config = new Configuration();
-         config.locale = locale;
-         getResources().updateConfiguration(config, this.getResources().getDisplayMetrics());
-
-     }//end setAppLocale(String app_language)
- */
     private String getSystemLocalLanguage() {
         Locale locale;
         //checking versions

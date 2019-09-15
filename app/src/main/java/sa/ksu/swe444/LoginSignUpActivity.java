@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import androidx.appcompat.widget.Toolbar;
 
 
 
@@ -18,7 +19,6 @@ public class LoginSignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_signup);
 
-//        initToolbar();
 
         init();
 
@@ -50,21 +50,6 @@ public class LoginSignUpActivity extends BaseActivity {
     }//End init()
 
 
-//    private void initToolbar() {
-//        /**
-//         * init toolbar
-//         */
-//        Toolbar toolbar = findViewById(R.id.toolbar2);
-////        toolbar.setTitle(getString(R.string.singles));
-////        toolbar.setNavigationIcon(R.drawable.back_arrow);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }//End onClick()
-//        });
-//
-//    }//End initToolbar()
-//
+
 
 }//End class

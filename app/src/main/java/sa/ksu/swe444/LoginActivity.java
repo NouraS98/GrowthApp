@@ -71,7 +71,6 @@ public class LoginActivity extends BaseActivity {
                                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
                                 builder.setTitle(R.string.Incorrect);
                                 builder.setMessage(R.string.incorrectPassOrID);
-//                                builder.setIcon(R.drawable.wrong_password_ic);
                                 builder.setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         nId.setText("");
@@ -91,8 +90,7 @@ public class LoginActivity extends BaseActivity {
 
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
                             builder.setTitle(R.string.Incorrect);
-//                            builder.setMessage(R.string.shortPass);
-//                            builder.setIcon(R.drawable.wrong_password_ic);
+
                             builder.setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     nId.setText("");
@@ -115,22 +113,7 @@ public class LoginActivity extends BaseActivity {
 
     }//End init()
 
-//
-//    private void initToolbar() {
-//        /**
-//         * init toolbar
-//         */
-//        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.login_toolbar);
-//        setSupportActionBar(toolbar);
-//        setTitle(R.string.login);
-//        toolbar.setNavigationIcon(R.drawable.back_arrow);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }//End onClick()
-//        });
-//
+
 //    }//End initToolbar()
 
     private void forgetPasswordAction() {
