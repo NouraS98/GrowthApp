@@ -29,7 +29,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-//        initToolbar();
+     initToolbar();
 
         init();
 
@@ -175,4 +175,21 @@ public class LoginActivity extends BaseActivity {
         finish();
 
     }//End executeSignUp()
+    private void initToolbar() {
+        /**
+         * init toolbar
+         */
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.LoginToolbar);
+        setSupportActionBar(toolbar);
+        setTitle(getString(R.string.login));
+        toolbar.setNavigationIcon(R.drawable.back_arrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }//End onClick()
+        });
+
+    }//End initToolbar()
+
 }

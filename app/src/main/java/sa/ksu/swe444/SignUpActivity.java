@@ -21,7 +21,7 @@ public class SignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-//        initToolbar();
+   initToolbar();
 
         init();
 
@@ -100,5 +100,21 @@ public class SignUpActivity extends BaseActivity {
         });//End positive button
         alertDialog.show();
     }//End showAlertDialog()
+    private void initToolbar() {
+        /**
+         * init toolbar
+         */
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.signupToolbar);
+        setSupportActionBar(toolbar);
+        setTitle(getString(R.string.sign_up));
+        toolbar.setNavigationIcon(R.drawable.back_arrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }//End onClick()
+        });
+
+    }//End initToolbar()
 
 }

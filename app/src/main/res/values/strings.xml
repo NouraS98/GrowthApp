@@ -35,4 +35,5 @@
     <string name="phone_msg">Incorrect phone number</string>
     <string name="passwords_msg">The password and the confirm password must match</string>
     <string name="sign_up">SignUp</string>
+    <string name="growth">Growth</string>
 </resources>

@@ -19,8 +19,8 @@ public class LoginSignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_signup);
 
-
-        init();
+init();
+initToolbar();
 
 
     }//End onCreate()
@@ -49,7 +49,14 @@ public class LoginSignUpActivity extends BaseActivity {
 
     }//End init()
 
+    private void initToolbar() {
+        /**
+         * init toolbar
+         */
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle(getString(R.string.growth));
 
-
+    }//End initToolbar()
 
 }//End class
