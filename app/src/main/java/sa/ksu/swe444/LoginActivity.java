@@ -8,40 +8,134 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends BaseActivity {
 
-    private String validNId = "1234567890";
-    private String validPassword = "123456";
-
-
     private EditText forgetPassNumber;
-    private TextInputEditText nId, pass;
+    private TextInputEditText emailEditText, passwordEditText;
     private Button loginBtn;
     private TextView forgetPass, send;
 
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-     initToolbar();
-
+        initToolbar();
         init();
 
     }//End onCreate()
 
     private void init() {
 
-        nId = findViewById(R.id.login_nId);
-        pass = findViewById(R.id.login_passwordET);
+        firebaseAuth = FirebaseAuth.getInstance();
+        emailEditText = findViewById(R.id.login_email);
+        passwordEditText = findViewById(R.id.login_passwordET);
         loginBtn = findViewById(R.id.loginPageBtn);
         forgetPass = findViewById(R.id.forget_pass);
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser != null) {
+                    showDialog(getResources().getString(R.string.youre_already_logged_in));
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else showDialog(getResources().getString(R.string.you_need_to_login));
+            }
+        };//end AuthStateListener
 
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String usernameInput = emailEditText.getText().toString();
+                String passwordInput = passwordEditText.getText().toString();
+
+                if (usernameInput.equals("")) {
+                    showDialog(getResources().getString(R.string.enter_email_dialog));
+                } else if (passwordInput.equals("")) {
+                    showDialog(getResources().getString(R.string.enter_password_dialog));
+                } else if (usernameInput.equals("") || passwordInput.equals("")) {
+                    showDialog(getResources().getString(R.string.enter_email_password_dialog));
+                } else if (!(usernameInput.equals("") || passwordInput.equals(""))) {
+                    firebaseAuth.signInWithEmailAndPassword(usernameInput, passwordInput).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (!task.isSuccessful()) {
+                                showDialog("error occured");
+                            } else {
+                                executeLogin();
+                            }
+                        }
+                    });
+                } else {
+
+                    showDialog("ettor");
+                }
+//                if ((usernameInput.equals("") || passwordInput.equals(""))) {
+//                    showDialog(getString(R.string.missing_info_msg));
+//                } else {
+//                    if (usernameInput.equals(validNId) && passwordInput.equals(validPassword)) {
+//                        executeLogin();
+//                    } else {
+//                        if (validPasswordLength(passwordInput)) {
+//                            if ((usernameInput.length() != 10) || !(usernameInput.equals(validNId) && passwordInput.equals(validPassword))) {
+//                                //Alert dialog
+//                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
+//                                builder.setTitle(R.string.Incorrect);
+//                                builder.setMessage(R.string.incorrectPassOrID);
+//                                builder.setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        emailEditText.setText("");
+//                                        passwordEditText.setText("");
+//                                    }//End onClick()
+//                                });
+//                                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        emailEditText.setText("");
+//                                        passwordEditText.setText("");
+//                                    }//End onClick()
+//                                });
+//                                builder.show();
+//
+//                            } //End if
+//                        } else {
+//
+//                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
+//                            builder.setTitle(R.string.Incorrect);
+//
+//                            builder.setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    emailEditText.setText("");
+//                                    passwordEditText.setText("");
+//                                }//End onClick()
+//                            });
+//                            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    emailEditText.setText("");
+//                                    passwordEditText.setText("");
+//                                }//End onClick()
+//                            });
+//                            builder.show();
+//                        }//End else
+//                    }//End inner else
+//                }//End outer else
+            }//End onClick()
+
+        }); //End loginBtn.setOnClickListener
         forgetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,72 +143,8 @@ public class LoginActivity extends BaseActivity {
             }//end onClick()
         });
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                String usernameInput = nId.getText().toString();
-                String passwordInput = pass.getText().toString();
-
-
-                if ((usernameInput.equals("") || passwordInput.equals(""))) {
-                    showDialog(getString(R.string.missing_info_msg));
-                } else {
-
-                    if (usernameInput.equals(validNId) && passwordInput.equals(validPassword)) {
-                        executeLogin();
-                    } else {
-                        if (validPasswordLength(passwordInput)) {
-                            if ((usernameInput.length() != 10) || !(usernameInput.equals(validNId) && passwordInput.equals(validPassword))) {
-                                //Alert dialog
-                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
-                                builder.setTitle(R.string.Incorrect);
-                                builder.setMessage(R.string.incorrectPassOrID);
-                                builder.setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        nId.setText("");
-                                        pass.setText("");
-                                    }//End onClick()
-                                });
-                                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        nId.setText("");
-                                        pass.setText("");
-                                    }//End onClick()
-                                });
-                                builder.show();
-
-                            } //End if
-                        } else {
-
-                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
-                            builder.setTitle(R.string.Incorrect);
-
-                            builder.setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    nId.setText("");
-                                    pass.setText("");
-                                }//End onClick()
-                            });
-                            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    nId.setText("");
-                                    pass.setText("");
-                                }//End onClick()
-                            });
-                            builder.show();
-                        }//End else
-                    }//End inner else
-                }//End outer else
-            }//End onClick()
-
-        }); //End loginBtn.setOnClickListener
 
     }//End init()
-
-
-//    }//End initToolbar()
 
     private void forgetPasswordAction() {
         final ForgotPassDialog customDialog = new ForgotPassDialog(LoginActivity.this);
@@ -122,6 +152,7 @@ public class LoginActivity extends BaseActivity {
 
         send = customDialog.findViewById(R.id.btn_send);
         forgetPassNumber = customDialog.findViewById(R.id.forgotPass_edtNumber);
+        forgetPassNumber.setText(emailEditText.toString());
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,11 +205,9 @@ public class LoginActivity extends BaseActivity {
         startActivity(intent);
         finish();
 
-    }//End executeSignUp()
+    }//End executeLogin()
+
     private void initToolbar() {
-        /**
-         * init toolbar
-         */
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.LoginToolbar);
         setSupportActionBar(toolbar);
         setTitle(getString(R.string.login));

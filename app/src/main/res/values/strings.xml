@@ -34,6 +34,15 @@
     <string name="nationalId_msg">incorrect national ID</string>
     <string name="phone_msg">Incorrect phone number</string>
     <string name="passwords_msg">The password and the confirm password must match</string>
-    <string name="sign_up">SignUp</string>
+    <string name="sign_up">Sign Up</string>
     <string name="growth">Growth</string>
+    <string name="email_address_hint">Email Address</string>
+    <string name="youre_already_logged_in">you\'re already logged in</string>
+    <string name="you_need_to_login">You need to login</string>
+    <string name="enter_email_dialog">Please enter your email address</string>
+    <string name="enter_password_dialog">Please enter your password</string>
+    <string name="enter_email_password_dialog">Please enter your email address and password</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="confirm_password_hint">Confirm password</string>
 </resources>

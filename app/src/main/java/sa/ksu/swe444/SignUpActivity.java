@@ -3,48 +3,60 @@ package sa.ksu.swe444;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class SignUpActivity extends BaseActivity {
 
-    private Button signup;
-    private TextInputEditText nID, phoneN, pass, confirmPass;
+    private Button signUpBtn;
+    private TextInputEditText firstNameEditText, lastNameEditText,emailEditText, phoneEditText, passwordEditText, confirmPassEditText;
+
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-   initToolbar();
-
+        initToolbar();
         init();
 
     }//End onCreate()
 
     private void init() {
-        nID = findViewById(R.id.signup_Nid);
-        phoneN = findViewById(R.id.phone_numberET);
-        pass = findViewById(R.id.signup_passwordET);
-        confirmPass = findViewById(R.id.signup_confirm_passwordET);
-        signup = findViewById(R.id.signupPageBtn);
+        firstNameEditText = findViewById(R.id.First_name);
+        lastNameEditText = findViewById(R.id.Last_name);
+        emailEditText = findViewById(R.id.signup_email);
+        phoneEditText = findViewById(R.id.phone_signup);
+        passwordEditText = findViewById(R.id.signup_passwordET);
+        confirmPassEditText = findViewById(R.id.signup_confirm_passwordET);
+        signUpBtn = findViewById(R.id.signupPageBtn);
 
 
-        signup.setOnClickListener(new View.OnClickListener() {
+        signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String nationalIdInput = nID.getText().toString();
-                String phoneInput = phoneN.getText().toString();
-                String passwordInput = pass.getText().toString();
-                String confirmPassInput = confirmPass.getText().toString();
+                String firstNameInput = firstNameEditText.getText().toString();
+                String lastNameInput = lastNameEditText.getText().toString();
+                String emailAddressInput = emailEditText.getText().toString();
+                String phoneInput = phoneEditText.getText().toString();
+                String passwordInput = passwordEditText.getText().toString();
+                String confirmPassInput = confirmPassEditText.getText().toString();
 
-                if (nationalIdInput.matches("")
+
+                if (firstNameInput.matches("")||lastNameInput.matches("") || emailAddressInput.matches("")
                         || phoneInput.matches("")
                         || passwordInput.matches("")
                         || confirmPassInput.matches("")) {
@@ -52,32 +64,42 @@ public class SignUpActivity extends BaseActivity {
 
                 } else {
 
-                    if (nationalIdInput.length() != 10) {
-                        showAlertDialog(getString(R.string.nationalId_msg));
-                    } else if (!validate(phoneInput)) {
+                    if (!validate(phoneInput)) {
                         showAlertDialog(getString(R.string.phone_msg));
                     } else if (!(passwordInput.equals(confirmPassInput))) {
                         showAlertDialog(getString(R.string.passwords_msg));
                     } else {
-                        executeSignUp();
+                        executeSignUp(emailAddressInput,passwordInput);
                     }//End inner else
 
                 } //End big else
 
             }//End onClick()
-        });//End signup.setOnClickListener
+        });//End signUpBtn.setOnClickListener
 
 
     }//End init()
 
 
 
-    public void executeSignUp() {
+    public void executeSignUp(String email, String password) {
 
+        firebaseAuth=FirebaseAuth.getInstance();
+        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(!(task.isSuccessful())){
+                    Log.e("Signup Error", "onCancelled", task.getException());
+                    showDialog("Error has Occurred, please try again");
+                }else{
+                    //User user = new Teacher(first,last,email,phone);
+                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
 
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
 
     }//End executeSignUp()
 
@@ -101,9 +123,6 @@ public class SignUpActivity extends BaseActivity {
         alertDialog.show();
     }//End showAlertDialog()
     private void initToolbar() {
-        /**
-         * init toolbar
-         */
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.signupToolbar);
         setSupportActionBar(toolbar);
         setTitle(getString(R.string.sign_up));

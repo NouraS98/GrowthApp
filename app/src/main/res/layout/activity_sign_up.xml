@@ -10,15 +10,15 @@
         android:id="@+id/signupToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#105878"
+        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="0dp"
         app:titleTextColor="#fff" />
     <LinearLayout
-        android:layout_width="252dp"
-        android:layout_height="469dp"
+        android:layout_width="300dp"
+        android:layout_height="600dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,40 +34,66 @@
             app:passwordToggleTint="@color/colorPrimary">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signup_Nid"
+                android:id="@+id/First_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="20dp"
                 android:ems="10"
-                android:hint="@string/national_id_hint"
-                android:inputType="number"
-                android:maxLength="10" />
+                android:hint="@string/first_name"
+                android:inputType="text"
+                android:maxLength="20" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_email"
-            android:layout_width="207dp"
-            android:layout_height="43dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="66dp"
-            android:layout_marginTop="20dp"
             android:background="@drawable/shape"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/colorPrimary">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phone_numberET"
+                android:id="@+id/Last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="20dp"
+                android:ems="10"
+                android:hint="@string/last_name"
+                android:inputType="text"
+                android:maxLength="20" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:background="@drawable/shape"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="20dp"
+                android:ems="10"
+                android:hint="@string/email_address_hint"
+                android:inputType="textEmailAddress"
+                android:maxLength="225" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:background="@drawable/shape"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phone_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -75,14 +101,13 @@
                 android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:hint="@string/phone_number"
-                android:inputType="number"
+                android:inputType="phone"
                 android:maxLength="10" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="66dp"
-            android:layout_marginTop="20dp"
             android:background="@drawable/shape"
             app:errorEnabled="true"
             app:passwordToggleEnabled="true"
@@ -90,7 +115,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_passwordET"
-                android:layout_width="207dp"
+                android:layout_width="match_parent"
                 android:layout_height="43dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
@@ -104,7 +129,6 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="66dp"
-            android:layout_marginTop="20dp"
             android:background="@drawable/shape"
             app:errorEnabled="true"
             app:passwordToggleEnabled="true"
@@ -112,26 +136,28 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_confirm_passwordET"
-                android:layout_width="207dp"
+                android:layout_width="match_parent"
                 android:layout_height="43dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:ems="10"
-                android:hint="@string/password_hint"
+                android:hint="@string/confirm_password_hint"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
         <Button
             android:id="@+id/signupPageBtn"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:background="#B0105878"
-            android:text="@string/signup_btn"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/roundedbutton"
+            android:text="@string/sign_up"
             android:textAllCaps="false"
-            android:textColor="#fff" />
+            android:textColor="@color/colorWhite"
+            android:textSize="17dp" />
+
 
     </LinearLayout>
 
