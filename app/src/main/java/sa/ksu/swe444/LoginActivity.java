@@ -2,6 +2,8 @@ package sa.ksu.swe444;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,14 +18,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends BaseActivity {
 
-    private EditText forgetPassNumber;
+    private EditText forgetPassDialog_emailEditText;
     private TextInputEditText emailEditText, passwordEditText;
-    private Button loginBtn;
-    private TextView forgetPass, send;
+    private Button loginBtn, forgotPassDialog_sendBtn;
+    private TextView forgetPass;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -64,78 +67,53 @@ public class LoginActivity extends BaseActivity {
                 String usernameInput = emailEditText.getText().toString();
                 String passwordInput = passwordEditText.getText().toString();
 
-                if (usernameInput.equals("")) {
+                if (usernameInput.equals("") && passwordInput.equals("")) {
+                    showDialog(getResources().getString(R.string.enter_email_password_dialog));
+                } else if (usernameInput.equals("")) {
                     showDialog(getResources().getString(R.string.enter_email_dialog));
+                } else if (!validateEmail(usernameInput)) {
+                    showDialog(getResources().getString(R.string.enter_valid_email));
                 } else if (passwordInput.equals("")) {
                     showDialog(getResources().getString(R.string.enter_password_dialog));
-                } else if (usernameInput.equals("") || passwordInput.equals("")) {
-                    showDialog(getResources().getString(R.string.enter_email_password_dialog));
                 } else if (!(usernameInput.equals("") || passwordInput.equals(""))) {
                     firebaseAuth.signInWithEmailAndPassword(usernameInput, passwordInput).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                showDialog("error occured");
-                            } else {
+                            if (task.isSuccessful()) {
                                 executeLogin();
+                            } else {
+                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                switch (errorCode) {
+
+                                    case "ERROR_USER_MISMATCH":
+                                        showDialog("The supplied credentials do not correspond to the previously signed in user.");
+                                        break;
+
+                                    case "ERROR_CREDENTIAL_ALREADY_IN_USE":
+                                        showDialog("This credential is already associated with a different user account.");
+                                        break;
+
+                                    case "ERROR_USER_DISABLED":
+                                        showDialog("The user account has been disabled by an administrator.");
+                                        break;
+
+                                    case "ERROR_USER_NOT_FOUND":
+                                        showDialog("There is no user record corresponding to this identifier.");
+                                        break;
+                                    default:
+                                        showDialog("some error has occurred, error code: " + errorCode);
+                                        break;
+                                }
                             }
                         }
                     });
                 } else {
-
-                    showDialog("ettor");
+                    showDialog("Error has occurred, please try again later");
                 }
-//                if ((usernameInput.equals("") || passwordInput.equals(""))) {
-//                    showDialog(getString(R.string.missing_info_msg));
-//                } else {
-//                    if (usernameInput.equals(validNId) && passwordInput.equals(validPassword)) {
-//                        executeLogin();
-//                    } else {
-//                        if (validPasswordLength(passwordInput)) {
-//                            if ((usernameInput.length() != 10) || !(usernameInput.equals(validNId) && passwordInput.equals(validPassword))) {
-//                                //Alert dialog
-//                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
-//                                builder.setTitle(R.string.Incorrect);
-//                                builder.setMessage(R.string.incorrectPassOrID);
-//                                builder.setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        emailEditText.setText("");
-//                                        passwordEditText.setText("");
-//                                    }//End onClick()
-//                                });
-//                                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        emailEditText.setText("");
-//                                        passwordEditText.setText("");
-//                                    }//End onClick()
-//                                });
-//                                builder.show();
-//
-//                            } //End if
-//                        } else {
-//
-//                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
-//                            builder.setTitle(R.string.Incorrect);
-//
-//                            builder.setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    emailEditText.setText("");
-//                                    passwordEditText.setText("");
-//                                }//End onClick()
-//                            });
-//                            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    emailEditText.setText("");
-//                                    passwordEditText.setText("");
-//                                }//End onClick()
-//                            });
-//                            builder.show();
-//                        }//End else
-//                    }//End inner else
-//                }//End outer else
             }//End onClick()
-
         }); //End loginBtn.setOnClickListener
+
+
         forgetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,26 +127,44 @@ public class LoginActivity extends BaseActivity {
     private void forgetPasswordAction() {
         final ForgotPassDialog customDialog = new ForgotPassDialog(LoginActivity.this);
         customDialog.show();
-
-        send = customDialog.findViewById(R.id.btn_send);
-        forgetPassNumber = customDialog.findViewById(R.id.forgotPass_edtNumber);
-        forgetPassNumber.setText(emailEditText.toString());
-        send.setOnClickListener(new View.OnClickListener() {
+        customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        forgotPassDialog_sendBtn = customDialog.findViewById(R.id.btn_send);
+        forgetPassDialog_emailEditText = customDialog.findViewById(R.id.forgotPass_edtEmail);
+        forgetPassDialog_emailEditText.setText(emailEditText.getText().toString());
+        forgotPassDialog_sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(forgetPassNumber.getText().toString().matches("")) &&
-                        (validate(forgetPassNumber.getText().toString()))) {
+                if (!(forgetPassDialog_emailEditText.getText().toString().matches("")) && validateEmail(forgetPassDialog_emailEditText.getText().toString())) {
+                    firebaseAuth.sendPasswordResetEmail(forgetPassDialog_emailEditText.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        customDialog.dismiss();
+                                        showDialog("reset password link has been sent to your email");
+                                    } else {
+                                        String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                        if (errorCode.equals("ERROR_USER_NOT_FOUND"))
+                                            showDialog("Parent not found, please enter your registered email address");
+                                        else
+                                            showDialog("sorry there has been an error: " + errorCode);
+                                    }
+                                }
+                            });
                     customDialog.dismiss();
                 }//End if block
-                else {
-                    showDialog(getString(R.string.invalid_phone_msg));
+                else if (!validateEmail(forgetPassDialog_emailEditText.getText().toString())) {
+                    showDialog(getResources().getString(R.string.enter_valid_email));
+                } else {
+                    showDialog(getResources().getString(R.string.enter_email_dialog));
                 }//End else block
-            }//End  onClick() //for send btn
+            }//End  onClick() //for forgotPassDialog_sendBtn btn
         });
     }//End forgetPasswordAction
 
     public void showDialog(String msg) {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.dialogbackground));
         alertDialog.setMessage(msg);
         alertDialog.setIcon(R.mipmap.ic_launcher);
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.okay),
@@ -182,26 +178,15 @@ public class LoginActivity extends BaseActivity {
 
     }//End showDialog()
 
-    private boolean validate(String phone) {
-        String regexStr = "^[0-9]{10,13}";
-
-        if (phone.length() < 10 || phone.length() > 13 || phone.matches(regexStr) == false) {
-            return false;
-        } else return true;
-    }//End validate()
-
-    private boolean validPasswordLength(String password) {
-
-        if (password.length() < 6) {
-            return false;
-        } else return true;
-
-
-    }//End validPasswordLength()
+    private boolean validateEmail(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
+    }// end validateEmail()
 
     public void executeLogin() {
 
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
 

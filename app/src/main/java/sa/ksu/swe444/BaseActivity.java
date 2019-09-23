@@ -1,12 +1,12 @@
 package sa.ksu.swe444;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
@@ -40,7 +40,6 @@ public class BaseActivity extends AppCompatActivity {
 
         try {
             if (progressDialog == null || !progressDialog.isShowing()) {
-
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage(getString(R.string.Pleas_wait));
                 progressDialog.setCancelable(isCancebale);
@@ -70,19 +69,17 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showDialog(String msg) {
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-
+        final androidx.appcompat.app.AlertDialog alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this).create();
+        alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.dialogbackground));
         alertDialog.setMessage(msg);
-
-        alertDialog.setButton((androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE), getString(R.string.okBtn), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                alertDialog.dismiss();
-
-            }//end on click
-
-        });//end setButton
-
+        alertDialog.setIcon(R.mipmap.ic_launcher);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.okay),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alertDialog.dismiss();
+                    }//End onClick()
+                });//End BUTTON_POSITIVE
         alertDialog.show();
 
     }//end showDialog

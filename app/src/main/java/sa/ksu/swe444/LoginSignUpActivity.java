@@ -29,14 +29,16 @@ public class LoginSignUpActivity extends BaseActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginSignUpActivity.this, LoginActivity.class));
+                Intent intent = new Intent(LoginSignUpActivity.this, LoginActivity.class);
+                startActivity(intent);
             }//End onClick()
         });
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginSignUpActivity.this, SignUpActivity.class));
+                Intent intent = new Intent(LoginSignUpActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }//End onClick()
         });
     }//End init()
