@@ -18,17 +18,25 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ClassFragment fr1;
+    private static final String TAG_HOME = "TAG_HOME";
+    Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        fr1 = new ClassFragment();
+        //replaceFragment(fr1, TAG_HOME);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+       toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +94,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
+            toolbar.setTitle(getString(R.string.menu_home));
+            replaceFragment(fr1, TAG_HOME);
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
@@ -93,14 +103,13 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_tools) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    private void replaceFragment(Fragment frag, String Tag) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, frag, Tag).addToBackStack(null).commit();
+    } // end replaceFragment
 }
