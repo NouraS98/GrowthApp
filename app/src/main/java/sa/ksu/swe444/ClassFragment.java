@@ -54,33 +54,33 @@ public class ClassFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareAlbums();
+//        prepareAlbums();
 
         return v;
     }
-
-    private void prepareAlbums() {
-        int[] covers = new int[]{
-                R.drawable.butterfly,
-                R.drawable.flower,
-                R.drawable.apple,
-                R.drawable.cat
-        };
-
-        Class a = new Class("Butterflies", covers[0]);
-        albumList.add(a);
-
-        a = new Class("Flowers", covers[1]);
-        albumList.add(a);
-
-        a = new Class("Apples", covers[2]);
-        albumList.add(a);
-
-        a = new Class("Kittens", covers[3]);
-        albumList.add(a);
-
-        adapter.notifyDataSetChanged();
-    }
+//
+//    private void prepareAlbums() {
+//        int[] covers = new int[]{
+//                R.drawable.butterfly,
+//                R.drawable.flower,
+//                R.drawable.apple,
+//                R.drawable.cat
+//        };
+//
+//        Class a = new Class("Butterflies", covers[0]);
+//        albumList.add(a);
+//
+//        a = new Class("Flowers", covers[1]);
+//        albumList.add(a);
+//
+//        a = new Class("Apples", covers[2]);
+//        albumList.add(a);
+//
+//        a = new Class("Kittens", covers[3]);
+//        albumList.add(a);
+//
+//        adapter.notifyDataSetChanged();
+//    }
 
     /**
      * RecyclerView item decoration - give equal margin around grid item
