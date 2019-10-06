@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "88615879712",
+    "firebase_url": "https://growthapp-swe444.firebaseio.com",
+    "project_id": "growthapp-swe444",
+    "storage_bucket": "growthapp-swe444.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88615879712:android:c30ecdcca3fffd821da845",
+        "android_client_info": {
+          "package_name": "sa.ksu.swe444"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88615879712-6ooj7c5e34i5qareeqvej3db9s8gemic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy5ueAskxccLgJn4Ustspxw2u64saRqr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "88615879712-6ooj7c5e34i5qareeqvej3db9s8gemic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

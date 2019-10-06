@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import androidx.appcompat.widget.Toolbar;
-
 
 
 public class LoginSignUpActivity extends BaseActivity {
 
 
-    private Button loginBtn, signupBtn;
+    private Button loginBtn, signUpBtn;
 
 
     @Override
@@ -19,40 +17,33 @@ public class LoginSignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_signup);
 
-init();
-initToolbar();
-
+        init();
+        //initToolbar();
 
     }//End onCreate()
 
     private void init() {
         loginBtn = findViewById(R.id.loginBtn);
-        signupBtn = findViewById(R.id.signupBtn);
+        signUpBtn = findViewById(R.id.signUpBtn);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                startActivity(new Intent(LoginSignUpActivity.this, LoginActivity.class));
-
+                Intent intent = new Intent(LoginSignUpActivity.this, LoginActivity.class);
+                startActivity(intent);
             }//End onClick()
         });
 
-        signupBtn.setOnClickListener(new View.OnClickListener() {
+        signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginSignUpActivity.this, SignUpActivity.class));
+                Intent intent = new Intent(LoginSignUpActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }//End onClick()
         });
-
-
     }//End init()
 
     private void initToolbar() {
-        /**
-         * init toolbar
-         */
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(getString(R.string.growth));
