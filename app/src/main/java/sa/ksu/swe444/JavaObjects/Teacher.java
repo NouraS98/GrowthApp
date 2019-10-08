@@ -6,7 +6,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.ArrayList;
 
 @IgnoreExtraProperties
-public class Teacher {
+public class Teacher extends User {
 
     String firstName;
     String lastName;

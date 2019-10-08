@@ -63,6 +63,13 @@ public class Class {
         this.img = img;
     }
 
+    public Class(String name, int numberOfStudents, String teacher, int img) {
+        this.name = name;
+        this.numberOfStudents = numberOfStudents;
+        this.teacher = teacher;
+        this.img = img;
+    }
+
     public Class(String name, int img) {
         this.name = name;
         this.img = img;

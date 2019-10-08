@@ -199,10 +199,10 @@ public class SignUpActivity extends BaseActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        showDialog("Verification email has been sent to"+firebaseUser.getEmail());
+                        //showDialog("Verification email has been sent to"+firebaseUser.getEmail());
                     } else {
                         Log.e("EmailVerification", "sendEmailVerification", task.getException());
-                        showDialog("Failed to send verification email.");
+                        //showDialog("Failed to send verification email.");
                     }
                 }
             });
@@ -286,12 +286,6 @@ public class SignUpActivity extends BaseActivity {
     public void showToast(String msg) {
         Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
         View view = toast.getView();
-
-        view.getBackground().setColorFilter(getResources().getColor(R.color.colorPink), PorterDuff.Mode.SRC_IN);
-
-        TextView text = view.findViewById(android.R.id.message);
-        text.setTextColor(getResources().getColor(R.color.colorWhite));
-
         toast.show();
     }
 

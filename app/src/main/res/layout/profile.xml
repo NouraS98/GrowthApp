@@ -31,7 +31,6 @@
                     android:id="@+id/profile"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
-
                     android:layout_below="@+id/header_cover_image"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
@@ -39,9 +38,10 @@
                     android:elevation="5dp"
                     android:padding="20dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/apple"
+                    android:src="@drawable/woman"
                     app:civ_border_color="#FFFFFFFF"
-                    app:civ_border_width="3dp" />
+                    app:civ_border_width="3dp"
+                    tools:ignore="UnknownId" />
 
                 <LinearLayout
                     android:id="@+id/profile_layout"
@@ -56,13 +56,7 @@
                     android:orientation="vertical"
                     android:paddingBottom="24dp">
 
-                    <ImageView
-                        android:id="@+id/logoutBtn"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="130dp"
-                        android:clickable="true"
-                        android:src="@drawable/door" />
+
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -73,8 +67,15 @@
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/colorPrimary">
 
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/nameProfilET"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:text="Name:"
+                            android:textSize="20dp" />
+                        <TextView
+                            android:id="@+id/nameProfile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
@@ -82,11 +83,12 @@
                             android:clickable="false"
                             android:cursorVisible="false"
                             android:ems="10"
+                            android:textSize="20dp"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:hint="@string/first_name"
+                            android:hint="Name"
                             android:inputType="text"
-                            android:text="Munerah Alahmad"
+                            android:text=""
 
                             />
 
@@ -100,21 +102,29 @@
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/colorPrimary">
 
-
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/phoneProfilET"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:textSize="20dp"
+                            android:text="Phone:"/>
+                        <TextView
+                            android:id="@+id/phoneProfile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
                             android:clickable="false"
                             android:cursorVisible="false"
+                            android:textSize="20dp"
+
                             android:ems="10"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
                             android:hint="@string/phone_number"
                             android:inputType="text"
-                            android:text="0502257057"
+                            android:text=""
 
                             />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -127,9 +137,15 @@
                         android:layout_marginBottom="10dp"
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/colorPrimary">
-
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/IDProfilET"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:textSize="20dp"
+                            android:text="Email:"/>
+                        <TextView
+                            android:id="@+id/EmailProfile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
@@ -137,11 +153,13 @@
                             android:clickable="false"
                             android:cursorVisible="false"
                             android:ems="10"
+                            android:textSize="20dp"
+
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:hint="@string/national_id_hint"
+                            android:hint="Email"
                             android:inputType="text"
-                            android:text="1106107145"
+                            android:text=""
 
                             />
                     </com.google.android.material.textfield.TextInputLayout>

@@ -5,26 +5,45 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import sa.ksu.swe444.JavaObjects.Class;
+import sa.ksu.swe444.JavaObjects.Parent;
+import sa.ksu.swe444.JavaObjects.Teacher;
+import sa.ksu.swe444.JavaObjects.User;
 import sa.ksu.swe444.adapters.ClassAdapter;
+
+import static sa.ksu.swe444.Constants.keys.USER_EMAIL;
+import static sa.ksu.swe444.Constants.keys.USER_ID;
+import static sa.ksu.swe444.Constants.keys.USER_NAME;
+import static sa.ksu.swe444.Constants.keys.USER_PHONE;
 
 public class ClassFragment extends Fragment {
 
@@ -33,6 +52,8 @@ public class ClassFragment extends Fragment {
     private List<Class> albumList;
     Button create_class;
     TextView class_name;
+    private FirebaseFirestore fireStore;
+    int position = 4;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.home, container, false);
@@ -47,6 +68,8 @@ public class ClassFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//on("Action", null).show();
+
                 final CreateClassDialog customDialog = new CreateClassDialog(getActivity());
                 customDialog.show();
                 customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -55,20 +78,19 @@ public class ClassFragment extends Fragment {
                 create_class.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int position = 4;
                         // String itemLabel = "" + mRandom.nextInt(100);
 
                         // Add an item to animals list
-                        Class a = new Class(class_name.getText()+"",  R.drawable.butterfly);
+                        Class a = new Class(class_name.getText() + "", R.drawable.apple);
 
                         albumList.add(a);
-                        adapter.notifyItemInserted(position);
+                        saveClass(a);
+                        adapter.notifyItemInserted(++position);
                         recyclerView.scrollToPosition(position);
                         customDialog.dismiss();
 
                     }//End  onClick() //for forgotPassDialog_sendBtn btn
                 });
-
 
             }
         });
@@ -94,12 +116,29 @@ public class ClassFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareAlbums();
-
+        prepareClasses();
+        ReadClasses();
         return v;
     }
 
-    private void prepareAlbums() {
+    private void saveClass(Class a) {
+        fireStore = FirebaseFirestore.getInstance();
+        String id = UUID.randomUUID().toString();
+        String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
+        Class c = new Class(a.getName(),0,USERID, a.getImg());
+        fireStore.collection("classes").document(id).set(c).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        });
+
+    }
+
+    private void prepareClasses() {
         int[] covers = new int[]{
                 R.drawable.butterfly,
                 R.drawable.flower,
@@ -155,10 +194,68 @@ public class ClassFragment extends Fragment {
                 }
             }
         }
+
     }
 
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+
+    public void ReadClasses(){
+        fireStore =FirebaseFirestore.getInstance();
+        String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
+        fireStore.collection("classes")
+                .whereEqualTo("teacher", USERID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Class a = new Class(document.get("name").toString(),R.drawable.apple);
+                                albumList.add(a);
+                                adapter.notifyItemInserted(++position);
+                                recyclerView.scrollToPosition(position);
+                                adapter.notifyDataSetChanged();
+
+                                Log.d("TAG", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+//    public void ReadClasses() {
+//        fireStore = FirebaseFirestore.getInstance();
+//        String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
+//        if (USERID != null) {
+//            fireStore.collection("teachers").document(USERID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        DocumentSnapshot doc = task.getResult();
+//                        if (doc.exists()) {
+//                            User userTeacher = new Teacher(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
+//                            MySharedPreference.putString(getApplicationContext(), USER_NAME, userTeacher.getFirstName() + " " + userTeacher.getLastName());
+//                            MySharedPreference.putString(getApplicationContext(), USER_EMAIL, userTeacher.getEmail());
+//                            MySharedPreference.putString(getApplicationContext(), USER_PHONE, userTeacher.getPhone());
+//                        } else {
+//                            showDialog("User not registered as teacher");
+//                        }
+//                    }//if task successful
+//                }
+//            })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(getApplicationContext(), "Failed to read user info", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    });
+//        } else {
+//            showDialog("User not found. Error");
+//        }
+//    }//end ReadTeacher
 }

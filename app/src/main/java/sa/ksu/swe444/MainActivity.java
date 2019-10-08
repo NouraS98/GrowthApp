@@ -1,5 +1,7 @@
 package sa.ksu.swe444;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ClassFragment fr1;
     ProfileFragment fr2;
+    ChatFragment fr3;
     private static final String TAG_HOME = "TAG_HOME";
     private static final String TAG_CLASSES = "TAG_CLASSES";
     private NavigationView navigationView;
@@ -47,7 +50,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         fr1 = new ClassFragment();
-        fr2= new ProfileFragment();
+        fr2 = new ProfileFragment();
+        fr3 = new ChatFragment();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
@@ -62,11 +66,11 @@ public class MainActivity extends AppCompatActivity
 
         String userType = "teacher";
 //        String userType= MySharedPreference.getString(this,"USERTYPE","");
-        if(userType.equals("teacher")){
+        if (userType.equals("teacher")) {
             toolbar.setTitle("Home");
             replaceFragment(fr1, TAG_CLASSES);
             ReadSingleTeacher();
-        } else if (userType.equals("parent")){
+        } else if (userType.equals("parent")) {
             //ReadSingleParent();
 //            replaceFragment(fr1, TAG_CLASSES);
         }
@@ -77,13 +81,11 @@ public class MainActivity extends AppCompatActivity
 
     private void ProfileInfo() {
         profileNameTextView = navigationView.getHeaderView(0).findViewById(R.id.profile_name);
-        if (!MySharedPreference.getString(this, "USERNAME", "").equals("")) {
-            profileNameTextView.setText(MySharedPreference.getString(this, "USERNAME", ""));
+        if (!MySharedPreference.getString(this, Constants.keys.USER_NAME, "").equals("")) {
+            profileNameTextView.setText(MySharedPreference.getString(this, Constants.keys.USER_NAME, ""));
         } else {
             profileNameTextView.setText("");
         }
-
-
     }
 
     @Override
@@ -124,27 +126,44 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            toolbar.setTitle("Home");
-//            replaceFragment(fr1, TAG_CLASSES);
-        } else if (id == R.id.nav_classes) {
+        if (id == R.id.nav_classes) {
             toolbar.setTitle("My Classes");
             replaceFragment(fr1, TAG_CLASSES);
 
         } else if (id == R.id.nav_chat) {
             toolbar.setTitle("Chats");
-
+            replaceFragment(fr3, TAG_CLASSES);
         } else if (id == R.id.nav_logout) {
-            FirebaseAuth fAuth = FirebaseAuth.getInstance();
-            fAuth.signOut();
-            MySharedPreference.clearData(getApplicationContext());
-            MySharedPreference.clearValue(this, "USERNAME");
-            MySharedPreference.clearValue(this, "USERTYPE");
-            MySharedPreference.clearValue(this, "USERID");
-            Intent intent = new Intent(MainActivity.this, LoginSignUpActivity.class);
-            startActivity(intent);
-        }else if(id == R.id.nav_profile){
-            replaceFragment(fr2,TAG_CLASSES);
+
+
+                //showing alert dialog to confirm logout action
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+                // Setting Dialog Message
+                alertDialog.setMessage(R.string.logout_msg);
+
+                // Setting Negative "logout" Button
+                alertDialog.setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        excuteLogout();
+                    }//end onClick
+                });//end setPositiveButton
+
+                // Setting Negative "cancel" Button
+                alertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }//end onClick
+                });//end setNegativeButton
+
+
+                alertDialog.show();
+
+
+        } else if (id == R.id.nav_profile) {
+            replaceFragment(fr2, TAG_CLASSES);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -219,15 +238,7 @@ public class MainActivity extends AppCompatActivity
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         DocumentSnapshot doc = task.getResult();
-                    //    userTeacher = new Teacher(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
-//                        MySharedPreference.putString(getApplicationContext(), "USERNAME", userTeacher.getFirstName() + " " + userTeacher.getLastName());
 
-                        //                    StringBuilder fields = new StringBuilder("");
-//                    fields.append("Name: ").append(doc.get("firstName"));
-//                    fields.append("\nEmail: ").append(doc.get("email"));
-//                    fields.append("\nPhone: ").append(doc.get("phone"));
-//                    fields.append("\nClasses").append(doc.get("classes"));
-//                    t.setText(fields.toString());
                     }
                 }
             })
@@ -241,7 +252,18 @@ public class MainActivity extends AppCompatActivity
         } else {
         }
     }
+public void excuteLogout(){
 
+    FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    fAuth.signOut();
+    MySharedPreference.clearData(getApplicationContext());
+    MySharedPreference.clearValue(getApplicationContext(), "USERNAME");
+    MySharedPreference.clearValue(getApplicationContext(), "USERTYPE");
+    MySharedPreference.clearValue(getApplicationContext(), "USERID");
+    Intent intent = new Intent(MainActivity.this, LoginSignUpActivity.class);
+    startActivity(intent);
+
+}
     public void ReadSingleParent() {
         fireStore = FirebaseFirestore.getInstance();
         String USERID = MySharedPreference.getString(this, "USERID", null);
@@ -275,4 +297,5 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
 }

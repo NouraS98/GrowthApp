@@ -8,11 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 
+import static sa.ksu.swe444.Constants.keys.USER_EMAIL;
+import static sa.ksu.swe444.Constants.keys.USER_ID;
+import static sa.ksu.swe444.Constants.keys.USER_NAME;
+import static sa.ksu.swe444.Constants.keys.USER_NATIONAL_ID;
+import static sa.ksu.swe444.Constants.keys.USER_NEW;
+import static sa.ksu.swe444.Constants.keys.USER_PHONE;
+import static sa.ksu.swe444.Constants.keys.USER_TYPE;
 
 
 public class ProfileFragment extends Fragment {
@@ -21,70 +31,49 @@ public class ProfileFragment extends Fragment {
     NavigationView navigationView;
     ImageView logout;
     View v;
+    TextView nametxtview,emailtxtview,phonetxtview;
     private static final String LOG = ProfileFragment.class.getSimpleName();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //initializing the views
-//        int type = MySharedPreference.getInt(getContext(), Constants.Keys.sectionType, 0);
-//
-//        if (type == 0) { //buisness
-            v = inflater.inflate(R.layout.profile, container, false);
-//        } else {
-//            v = inflater.inflate(R.layout.fragment_profile_company, container, false);
-//
-//        }
+
+        v = inflater.inflate(R.layout.profile, container, false);
 
         initViews();
         executeGetProfileSetting();
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logoutAction();
-            }
-        });
 
 
         return v;
 
     }//end onCreateView
 
-    private void logoutAction() {
-        //showing alert dialog to confirm logout action
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // Setting Dialog Message
-        alertDialog.setMessage(R.string.logout_msg);
-
-        // Setting Negative "logout" Button
-        alertDialog.setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                excuteLogout();
-            }//end onClick
-        });//end setPositiveButton
-
-        // Setting Negative "cancel" Button
-        alertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                dialog.cancel();
-            }//end onClick
-        });//end setNegativeButton
+        String name = MySharedPreference.getString(getContext(),USER_NAME,":(");
+        String email = MySharedPreference.getString(getContext(),USER_EMAIL,":(");
+        String phone = MySharedPreference.getString(getContext(),USER_PHONE,":(");
+        String type = MySharedPreference.getString(getContext(),USER_TYPE,":(");
+        String uid = MySharedPreference.getString(getContext(),USER_ID,":(");
+        String nid = MySharedPreference.getString(getContext(), USER_NATIONAL_ID,":(");
+        Boolean newuser = MySharedPreference.getBoolean(getContext(),USER_NEW,false);
+        nametxtview = getView().findViewById(R.id.nameProfile);
+        nametxtview.setText(name);
+        phonetxtview = getView().findViewById(R.id.phoneProfile);
+        phonetxtview.setText(phone);
+        emailtxtview = getView().findViewById(R.id.EmailProfile);
+        emailtxtview.setText(email);
+    }
 
 
-        alertDialog.show();
-
-    }//end logoutAction()
 
     private void initViews() {
 
 
         navigationView = v.findViewById(R.id.nav_view);
         getActivity().setTitle(R.string.menu_myInfo);
-        logout = (ImageView) v.findViewById(R.id.logoutBtn);
 
 
     }//end initViews()
@@ -92,35 +81,13 @@ public class ProfileFragment extends Fragment {
 
     private void executeGetProfileSetting() {
         //saved data
+
+
         MySharedPreference.putBoolean(getContext(), Constants.keys.IS_LOGIN, true);
 
+
+
     }//end executeGetProfileSetting()
-
-
-    private void excuteLogout() {
-
-        clearData();
-        MySharedPreference.putBoolean(getContext(), Constants.keys.IS_LOGIN, false);
-
-
-        Intent intent = new Intent(getContext(), LoginSignUpActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-
-
-    }//end excuteLogout()
-
-
-    private void clearData() {
-
-        //setting the previous language
-        String language = MySharedPreference.getString(getContext(), Constants.keys.APP_LANGUAGE, "en");
-
-        MySharedPreference.clearData(getContext());
-        MySharedPreference.putString(getContext(), Constants.keys.APP_LANGUAGE, language);
-
-    }//end cleaData()
 
 
 }//end fragment class

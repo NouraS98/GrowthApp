@@ -1,31 +1,23 @@
 package sa.ksu.swe444.JavaObjects;
-import com.google.firebase.database.IgnoreExtraProperties;
 
-@IgnoreExtraProperties
-public class Parent extends User{
+public class User {
     String firstName;
     String lastName;
     String email;
     String phone;
-    String nationalID;
     String gender;
+    String nationalID;
 
-    public Parent() {
-    }
-
-    public Parent(String firstName, String lastName, String email, String phone) {
+    public User(String firstName, String lastName, String email, String phone, String gender, String nationalID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-    }
-
-    public Parent(String firstName, String lastName, String email, String phone, String nationalID) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
+        this.gender = gender;
         this.nationalID = nationalID;
+    }
+
+    public User() {
     }
 
     public String getFirstName() {
@@ -60,19 +52,19 @@ public class Parent extends User{
         this.phone = phone;
     }
 
-    public String getNationalID() {
-        return nationalID;
-    }
-
-    public void setNationalID(String nationalID) {
-        this.nationalID = nationalID;
-    }
-
     public String getGender() {
         return gender;
     }
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getNationalID() {
+        return nationalID;
+    }
+
+    public void setNationalID(String nationalID) {
+        this.nationalID = nationalID;
     }
 }

@@ -28,11 +28,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import sa.ksu.swe444.JavaObjects.Parent;
 import sa.ksu.swe444.JavaObjects.Teacher;
+import sa.ksu.swe444.JavaObjects.User;
 
 import static sa.ksu.swe444.Constants.keys.USER_EMAIL;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
 import static sa.ksu.swe444.Constants.keys.USER_NAME;
 import static sa.ksu.swe444.Constants.keys.USER_PHONE;
+import static sa.ksu.swe444.Constants.keys.USER_TYPE;
 
 public class LoginActivity extends BaseActivity {
 
@@ -45,8 +47,8 @@ public class LoginActivity extends BaseActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private RadioGroup radioGroup;
-    boolean teacherResult = false;
-    boolean parentResult = false;
+    boolean isTeacher = false;
+    boolean isParent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +108,7 @@ public class LoginActivity extends BaseActivity {
                                     firebaseUser = firebaseAuth.getCurrentUser();
                                     userId = firebaseUser.getUid();
                                     MySharedPreference.putString(getApplicationContext(), Constants.keys.USER_ID, userId);
+                                    //checkUserType();
                                     executeLogin();
                                 }
                             } else {
@@ -152,6 +155,29 @@ public class LoginActivity extends BaseActivity {
 
 
     }//End init()
+
+    private void checkUserType() {
+        String USERID = MySharedPreference.getString(this, USER_ID, null);
+        fireStore.collection("teachers").document(USERID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    if (doc.exists()) {
+                        MySharedPreference.putString(getApplicationContext(), USER_TYPE, "Teacher");
+                    } else {
+                        MySharedPreference.putString(getApplicationContext(), USER_TYPE, "Parent");
+                    }
+                }//if task successful
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Failed to read user info", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
 
     private void forgetPasswordAction() {
         final ForgotPassDialog customDialog = new ForgotPassDialog(LoginActivity.this);
@@ -216,24 +242,29 @@ public class LoginActivity extends BaseActivity {
 
         int selectedId = radioGroup.getCheckedRadioButtonId();
         RadioButton roleButton = (RadioButton) findViewById(selectedId);
-
+        MySharedPreference.putString(getApplicationContext(), USER_TYPE,"Teacher");
         if (roleButton.getText().equals("Teacher")) {
-            if (ReadTeacher()) {
+            if (MySharedPreference.getString(getApplicationContext(), USER_TYPE, "none").equals( "Teacher")) {
+                ReadTeacher();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
-            }//if read teacher
+            } else {
+                showDialog("User is not registered as Teacher "+MySharedPreference.getString(getApplicationContext(),USER_TYPE,"not registed"));
+            }
         } else if (roleButton.getText().equals("Parent")) {
-            if (ReadParent()) {
+            if (MySharedPreference.getString(getApplicationContext(), USER_TYPE, "none") .equals( "Parent")) {
+                ReadParent();
                 Intent intent = new Intent(LoginActivity.this, ParentMainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             } else {
-                showDialog("haha");
+                showDialog("User is not registered as Parent");
             }
-        } //end if radiobutton choice
+        }
+        //end if radiobutton choice
     }//End executeLogin()
 
     private void initToolbar() {
@@ -255,7 +286,7 @@ public class LoginActivity extends BaseActivity {
                 || buttonGroup.getCheckedRadioButtonId() == R.id.parent_button);
     }
 
-    public boolean ReadTeacher() {
+    public void ReadTeacher() {
         fireStore = FirebaseFirestore.getInstance();
         String USERID = MySharedPreference.getString(this, USER_ID, null);
         if (USERID != null) {
@@ -265,14 +296,12 @@ public class LoginActivity extends BaseActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot doc = task.getResult();
                         if (doc.exists()) {
-                            Teacher userTeacher = new Teacher(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
+                            User userTeacher = new Teacher(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
                             MySharedPreference.putString(getApplicationContext(), USER_NAME, userTeacher.getFirstName() + " " + userTeacher.getLastName());
                             MySharedPreference.putString(getApplicationContext(), USER_EMAIL, userTeacher.getEmail());
                             MySharedPreference.putString(getApplicationContext(), USER_PHONE, userTeacher.getPhone());
-                            teacherResult = true;
                         } else {
                             showDialog("User not registered as teacher");
-                            teacherResult = false;
                         }
                     }//if task successful
                 }
@@ -287,10 +316,9 @@ public class LoginActivity extends BaseActivity {
         } else {
             showDialog("User not found. Error");
         }
-        return teacherResult;
     }//end ReadTeacher
 
-    public boolean ReadParent() {
+    public void ReadParent() {
         fireStore = FirebaseFirestore.getInstance();
         String USERID = MySharedPreference.getString(this, USER_ID, null);
         if (USERID != null) {
@@ -300,15 +328,12 @@ public class LoginActivity extends BaseActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot doc = task.getResult();
                         if (doc.exists()) {
-                            parentResult = true;
-                            showDialog(parentResult+" exists");
-                            Parent userParent = new Parent(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
+                            User userParent = new Parent(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
                             MySharedPreference.putString(getApplicationContext(), USER_NAME, userParent.getFirstName() + " " + userParent.getLastName());
                             MySharedPreference.putString(getApplicationContext(), USER_EMAIL, userParent.getEmail());
                             MySharedPreference.putString(getApplicationContext(), USER_PHONE, userParent.getPhone());
                         } else {
                             showDialog("User not registered as parent");
-                            parentResult = false;
                         }
                     }//if task successful
                 }
@@ -323,7 +348,5 @@ public class LoginActivity extends BaseActivity {
         } else {
             showDialog("User not found. Error");
         }
-        showDialog(parentResult + " ");
-        return parentResult;
     }//end ReadTeacher
 }
