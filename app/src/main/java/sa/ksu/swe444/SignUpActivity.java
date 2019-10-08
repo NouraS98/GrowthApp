@@ -148,26 +148,26 @@ public class SignUpActivity extends BaseActivity {
                     switch (errorCode) {
 
                         case "ERROR_INVALID_EMAIL":
-                            showToast("The email address is badly formatted.");
+                            showDialog("The email address is badly formatted.");
                             break;
 
                         case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-                            showToast("An account already exists with the same email address. Sign in using this email address.");
+                            showDialog("An account already exists with the same email address. Sign in using this email address.");
                             break;
 
                         case "ERROR_EMAIL_ALREADY_IN_USE":
-                            showToast("The email address is already in use.");
+                            showDialog("The email address is already in use.");
                             break;
 
                         case "ERROR_USER_DISABLED":
-                            showToast("The user account has been disabled by an administrator.");
+                            showDialog("The user account has been disabled by an administrator.");
                             break;
 
                         case "ERROR_WEAK_PASSWORD":
-                            showToast("The given password is invalid. it must 6 characters at least");
+                            showDialog("The given password is invalid. it must 6 characters at least");
                             break;
                         default:
-                            showToast("Error has Occurred, please try again");
+                            showDialog("Error has Occurred, please try again");
                     }//end switch
                 } else {
                     executeSaveUser();
@@ -266,7 +266,7 @@ public class SignUpActivity extends BaseActivity {
                     }
                 }
             };
-            handler.postDelayed(runnable, 1300);
+            handler.postDelayed(runnable, 5000);
         }
     }//End showDialog()
 
@@ -285,7 +285,6 @@ public class SignUpActivity extends BaseActivity {
 
     public void showToast(String msg) {
         Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
-        View view = toast.getView();
         toast.show();
     }
 
