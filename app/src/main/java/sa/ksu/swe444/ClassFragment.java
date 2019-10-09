@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,7 +27,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -81,7 +84,7 @@ public class ClassFragment extends Fragment {
                         // String itemLabel = "" + mRandom.nextInt(100);
 
                         // Add an item to animals list
-                        Class a = new Class(class_name.getText() + "", R.drawable.apple);
+                        Class a = new Class(class_name.getText() + "", R.drawable.wooden);
 
                         albumList.add(a);
                         saveClass(a);
@@ -213,7 +216,7 @@ public class ClassFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Class a = new Class(document.get("name").toString(),R.drawable.apple);
+                                Class a = new Class(document.get("name").toString(),R.drawable.wooden);
                                 albumList.add(a);
                                 adapter.notifyItemInserted(++position);
                                 recyclerView.scrollToPosition(position);
@@ -226,6 +229,34 @@ public class ClassFragment extends Fragment {
                         }
                     }
                 });
+//
+//        fireStore.collection("classes")
+//                .whereEqualTo("teacher", USERID)
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value,
+//                                        @Nullable FirebaseFirestoreException e) {
+//                        if (e != null) {
+//                            Log.w("SNAPSHOT", "Listen failed.", e);
+//                            return;
+//                        }
+//
+//                        List<String> cities = new ArrayList<>();
+//                        for (QueryDocumentSnapshot doc : value) {
+//                            Class a = new Class(doc.get("name").toString(),R.drawable.apple);
+//                            for(int i=0; i<albumList.size();i++){
+//                                if((albumList.get(i).getName()!=doc.get("name").toString())){
+//                                    albumList.add(a);
+//                                    adapter.notifyItemInserted(++position);
+//                                    recyclerView.scrollToPosition(position);
+//                                    adapter.notifyDataSetChanged();
+//                                }
+//                            }
+//
+//                        }
+//                        Log.d("SNAPSHOT", "Current cites in CA: " + cities);
+//                    }
+//                });
     }
 //    public void ReadClasses() {
 //        fireStore = FirebaseFirestore.getInstance();

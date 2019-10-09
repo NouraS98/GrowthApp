@@ -24,7 +24,7 @@
         android:id="@+id/profile_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+android:layout_margin="5dp"
         android:textColor="@color/colorWhite"
         android:fontFamily="@font/tajawalbold"
         android:textSize="@dimen/text_size"
