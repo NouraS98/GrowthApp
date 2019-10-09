@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/dialogbackground"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txt_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:text="Edit Profile"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/tajawalbold"
+        android:text="Name:"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/text_size" />
+
+    <EditText
+        android:id="@+id/editprofile_edtname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:editable="false"
+        android:focusable="false"
+        android:textColor="@color/colorPrimaryDark"
+        android:hint="Enter your name"
+        android:inputType="textEmailAddress"
+        android:longClickable="false"
+        android:maxLength="225"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/tajawalbold"
+        android:text="Phone:"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:id="@+id/phone_changed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:fontFamily="@font/tajawalregular"
+        android:text="phone changed successfully ✔ "
+        android:textColor="@color/colorGreen"
+        android:visibility="gone"
+
+        ></TextView>
+
+    <EditText
+        android:id="@+id/editprofile_edtphone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Enter your phone"
+        android:inputType="textEmailAddress"
+        android:maxLength="225"
+
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/tajawalbold"
+        android:text="Email:"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:id="@+id/email_changed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:fontFamily="@font/tajawalregular"
+        android:text="email changed successfully ✔ "
+        android:textColor="@color/colorGreen"
+        android:visibility="gone"
+
+        ></TextView>
+
+    <EditText
+        android:id="@+id/editprofile_edteame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:editable="false"
+        android:focusable="false"
+        android:textColor="@color/colorPrimaryDark"
+        android:hint="@string/enter_your_phone_number"
+        android:inputType="textEmailAddress"
+        android:longClickable="false"
+        android:maxLength="225"
+        android:textSize="@dimen/text_size" />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/roundedbutton"
+        android:gravity="center"
+        android:paddingHorizontal="10dp"
+        android:text="Save"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/button_text_size" />
+
+
+</LinearLayout>
