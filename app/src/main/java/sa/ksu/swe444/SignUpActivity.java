@@ -231,7 +231,7 @@ public class SignUpActivity extends BaseActivity {
         MySharedPreference.putBoolean(getApplicationContext(),USER_NEW,true);
     }
 
-    private boolean validatePhone(String phone) {
+    private boolean validatePhone( String phone) {
         String regexStr = "^05\\d{8}$";
         if (phone.length() < 10 || phone.length() > 13 || phone.matches(regexStr) == false) {
             return false;
