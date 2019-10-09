@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
->
+    android:layout_height="match_parent">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/LoginToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="0dp"
         android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="0dp"
         app:titleTextColor="#fff" />
 
 
@@ -43,7 +43,8 @@
                 android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:hint="@string/email_address_hint"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/text_size" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -63,32 +64,39 @@
                 android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:hint="@string/password_hint"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textSize="@dimen/text_size" />
+            />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <RadioGroup
             android:id="@+id/Role"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/teacher_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Teacher" />
+                android:text="Teacher"
+                android:textSize="@dimen/text_size" />
+
 
             <RadioButton
                 android:id="@+id/parent_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Parent" />
+                android:text="Parent"
+                android:textSize="@dimen/text_size" />
+
 
         </RadioGroup>
+
         <Button
             android:id="@+id/loginPageBtn"
             android:layout_width="150dp"
@@ -100,7 +108,7 @@
             android:text="@string/login_btn"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
-            android:textSize="17dp" />
+            android:textSize="@dimen/button_text_size" />
 
         <TextView
             android:id="@+id/forget_pass"
@@ -109,7 +117,7 @@
             android:layout_gravity="center"
             android:text="Forgot your password?"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_size_smaller2" />
 
 
     </LinearLayout>

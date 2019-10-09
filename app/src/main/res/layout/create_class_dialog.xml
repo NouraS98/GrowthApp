@@ -15,7 +15,7 @@
         android:layout_margin="20dp"
         android:text="@string/CreateClass"
         android:textColor="@color/colorAccent"
-        android:textSize="22sp"
+        android:textSize="@dimen/text_size"
         android:textStyle="bold"
 
         />
@@ -28,6 +28,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:hint="@string/enter_class"
+        android:textSize="@dimen/text_size"
         android:inputType="textEmailAddress"
         android:maxLength="225" />
 
@@ -36,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="right"
+        android:paddingHorizontal="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
@@ -45,7 +47,7 @@
         android:text="@string/CreateClass"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
-        android:textSize="17dp" />
+        android:textSize="@dimen/button_text_size" />
 
 
 

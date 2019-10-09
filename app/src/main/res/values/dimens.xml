@@ -6,8 +6,9 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="detail_backdrop_height">250dp</dimen>
-
-
+    <dimen name="text_size">20dp</dimen>
+    <dimen name="text_size_smaller2">18dp</dimen>
+    <dimen name="button_text_size">22dp</dimen>
     <dimen name="backdrop_title">30dp</dimen>
     <dimen name="backdrop_subtitle">18dp</dimen>
     <dimen name="card_margin">5dp</dimen>

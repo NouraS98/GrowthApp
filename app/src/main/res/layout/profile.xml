@@ -13,7 +13,7 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#438A8787">
+        android:background="@drawable/profilegradient">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -57,8 +57,6 @@
                     android:paddingBottom="24dp">
 
 
-
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -70,10 +68,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:fontFamily="@font/tajawalbold"
+                            android:textColor="@color/colorPrimaryDark"
                             android:text="Name:"
-                            android:textSize="20dp" />
+                            android:textSize="@dimen/text_size" />
+
                         <TextView
                             android:id="@+id/nameProfile"
                             android:layout_width="match_parent"
@@ -83,12 +85,12 @@
                             android:clickable="false"
                             android:cursorVisible="false"
                             android:ems="10"
-                            android:textSize="20dp"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
                             android:hint="Name"
                             android:inputType="text"
                             android:text=""
+                            android:textSize="@dimen/text_size"
 
                             />
 
@@ -105,10 +107,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
-                            android:textSize="20dp"
-                            android:text="Phone:"/>
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:fontFamily="@font/tajawalbold"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:text="Phone:"
+                            android:textSize="@dimen/text_size" />
+
                         <TextView
                             android:id="@+id/phoneProfile"
                             android:layout_width="match_parent"
@@ -117,14 +123,14 @@
                             android:layout_marginEnd="20dp"
                             android:clickable="false"
                             android:cursorVisible="false"
-                            android:textSize="20dp"
-
                             android:ems="10"
+
                             android:focusable="false"
                             android:focusableInTouchMode="false"
                             android:hint="@string/phone_number"
                             android:inputType="text"
                             android:text=""
+                            android:textSize="@dimen/text_size"
 
                             />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -137,13 +143,18 @@
                         android:layout_marginBottom="10dp"
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/colorPrimary">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
-                            android:textSize="20dp"
-                            android:text="Email:"/>
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="Email:"
+                            android:fontFamily="@font/tajawalbold"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="@dimen/text_size" />
+
                         <TextView
                             android:id="@+id/EmailProfile"
                             android:layout_width="match_parent"
@@ -153,13 +164,13 @@
                             android:clickable="false"
                             android:cursorVisible="false"
                             android:ems="10"
-                            android:textSize="20dp"
-
                             android:focusable="false"
+
                             android:focusableInTouchMode="false"
                             android:hint="Email"
                             android:inputType="text"
                             android:text=""
+                            android:textSize="@dimen/text_size"
 
                             />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -172,22 +183,22 @@
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/colorPrimary">
 
-<!--                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView-->
-<!--                            android:id="@+id/cityProfilET"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginStart="20dp"-->
-<!--                            android:layout_marginEnd="20dp"-->
-<!--                            android:clickable="false"-->
-<!--                            android:cursorVisible="false"-->
-<!--                            android:ems="10"-->
-<!--                            android:focusable="false"-->
-<!--                            android:focusableInTouchMode="false"-->
-<!--                            android:hint="@string/signup_city_hint"-->
-<!--                            android:inputType="text"-->
-<!--                            android:text="Riyadh"-->
+                        <!--                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView-->
+                        <!--                            android:id="@+id/cityProfilET"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginStart="20dp"-->
+                        <!--                            android:layout_marginEnd="20dp"-->
+                        <!--                            android:clickable="false"-->
+                        <!--                            android:cursorVisible="false"-->
+                        <!--                            android:ems="10"-->
+                        <!--                            android:focusable="false"-->
+                        <!--                            android:focusableInTouchMode="false"-->
+                        <!--                            android:hint="@string/signup_city_hint"-->
+                        <!--                            android:inputType="text"-->
+                        <!--                            android:text="Riyadh"-->
 
-<!--                            />-->
+                        <!--                            />-->
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>

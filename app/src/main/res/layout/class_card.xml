@@ -52,7 +52,8 @@
                 android:paddingTop="@dimen/album_title_padding"
                 android:paddingEnd="@dimen/album_title_padding"
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/album_title" />
+                android:fontFamily="@font/tajawalregular"
+                android:textSize="@dimen/text_size" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

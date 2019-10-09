@@ -7,16 +7,6 @@
     android:background="@color/colorWhite"
     >
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:layout_marginTop="0dp"-->
-<!--        android:background="@color/colorPrimary"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:titleTextColor="#fff" />-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="210dp"
@@ -59,7 +49,7 @@
             android:background="@drawable/roundedbutton"
             android:text="@string/login_btn"
             android:textAllCaps="false"
-            android:textSize="17dp"
+            android:textSize="@dimen/button_text_size"
             android:textColor="@color/colorWhite" />
 
         <Button
@@ -71,7 +61,7 @@
             android:background="@drawable/roundedbutton"
             android:text="Create Account"
             android:textAllCaps="false"
-            android:textSize="14dp"
+            android:textSize="@dimen/text_size"
             android:textColor="@color/colorWhite" />
 
 
