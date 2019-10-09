@@ -69,7 +69,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showDialog(String msg) {
 
-        final androidx.appcompat.app.AlertDialog alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.dialogbackground));
         alertDialog.setMessage(msg);
         alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -80,7 +80,10 @@ public class BaseActivity extends AppCompatActivity {
                         alertDialog.dismiss();
                     }//End onClick()
                 });//End BUTTON_POSITIVE
-        alertDialog.show();
+        if(!isFinishing())
+        {
+            alertDialog.show();
+        }
 
     }//end showDialog
 }//END CLASS

@@ -136,30 +136,30 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
 
 
-                //showing alert dialog to confirm logout action
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            //showing alert dialog to confirm logout action
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
-                // Setting Dialog Message
-                alertDialog.setMessage(R.string.logout_msg);
+            // Setting Dialog Message
+            alertDialog.setMessage(R.string.logout_msg);
 
-                // Setting Negative "logout" Button
-                alertDialog.setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+            // Setting Negative "logout" Button
+            alertDialog.setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
 
-                        excuteLogout();
-                    }//end onClick
-                });//end setPositiveButton
+                    excuteLogout();
+                }//end onClick
+            });//end setPositiveButton
 
-                // Setting Negative "cancel" Button
-                alertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+            // Setting Negative "cancel" Button
+            alertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
 
-                        dialog.cancel();
-                    }//end onClick
-                });//end setNegativeButton
+                    dialog.cancel();
+                }//end onClick
+            });//end setNegativeButton
 
 
-                alertDialog.show();
+            alertDialog.show();
 
 
         } else if (id == R.id.nav_profile) {
@@ -252,18 +252,20 @@ public class MainActivity extends AppCompatActivity
         } else {
         }
     }
-public void excuteLogout(){
 
-    FirebaseAuth fAuth = FirebaseAuth.getInstance();
-    fAuth.signOut();
-    MySharedPreference.clearData(getApplicationContext());
-    MySharedPreference.clearValue(getApplicationContext(), "USERNAME");
-    MySharedPreference.clearValue(getApplicationContext(), "USERTYPE");
-    MySharedPreference.clearValue(getApplicationContext(), "USERID");
-    Intent intent = new Intent(MainActivity.this, LoginSignUpActivity.class);
-    startActivity(intent);
+    public void excuteLogout() {
 
-}
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        fAuth.signOut();
+        MySharedPreference.clearData(getApplicationContext());
+        MySharedPreference.clearValue(getApplicationContext(), "USERNAME");
+        MySharedPreference.clearValue(getApplicationContext(), "USERTYPE");
+        MySharedPreference.clearValue(getApplicationContext(), "USERID");
+        Intent intent = new Intent(MainActivity.this, LoginSignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void ReadSingleParent() {
         fireStore = FirebaseFirestore.getInstance();
         String USERID = MySharedPreference.getString(this, "USERID", null);

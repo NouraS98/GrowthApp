@@ -218,7 +218,7 @@ public class LoginActivity extends BaseActivity {
     }//End forgetPasswordAction
 
     public void showDialog(String msg) {
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
         alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.dialogbackground));
         alertDialog.setMessage(msg);
         alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -229,7 +229,10 @@ public class LoginActivity extends BaseActivity {
                         alertDialog.dismiss();
                     }//End onClick()
                 });//End BUTTON_POSITIVE
-        alertDialog.show();
+        if(!isFinishing())
+        {
+            alertDialog.show();
+        }
 
     }//End showDialog()
 
