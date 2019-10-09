@@ -28,11 +28,12 @@ Button logout;
                 FirebaseAuth fAuth = FirebaseAuth.getInstance();
                 fAuth.signOut();
                 MySharedPreference.clearData(getApplicationContext());
-                MySharedPreference.clearValue(getApplicationContext(), "USERNAME");
-                MySharedPreference.clearValue(getApplicationContext(), "USERTYPE");
-                MySharedPreference.clearValue(getApplicationContext(), "USERID");
+                MySharedPreference.clearValue(getApplicationContext(), USER_NAME);
+                MySharedPreference.clearValue(getApplicationContext(), USER_TYPE);
+                MySharedPreference.clearValue(getApplicationContext(), USER_ID);
                 Intent intent = new Intent(ParentMainActivity.this, LoginSignUpActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -44,6 +45,6 @@ Button logout;
         String nid = MySharedPreference.getString(getApplicationContext(), USER_NATIONAL_ID,":(");
         Boolean newuser = MySharedPreference.getBoolean(getApplicationContext(),USER_NEW,false);
 
-        showDialog("hello "+name+" "+email+" "+phone+" "+type+" "+uid+" "+nid+" "+newuser);
+        //showDialog("hello "+name+" "+email+" "+phone+" "+type+" "+uid+" "+nid+" "+newuser);
     }
 }

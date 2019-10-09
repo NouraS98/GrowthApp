@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,18 +65,18 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        String userType = "teacher";
-//        String userType= MySharedPreference.getString(this,"USERTYPE","");
-        if (userType.equals("teacher")) {
-            toolbar.setTitle("Home");
-            replaceFragment(fr1, TAG_CLASSES);
-            ReadSingleTeacher();
-        } else if (userType.equals("parent")) {
-            //ReadSingleParent();
+//        String userType = "teacher";
+////        String userType= MySharedPreference.getString(this,"USERTYPE","");
+//        if (userType.equals("teacher")) {
+//            toolbar.setTitle("Home");
 //            replaceFragment(fr1, TAG_CLASSES);
-        }
+//            ReadSingleTeacher();
+//        } else if (userType.equals("parent")) {
+//            //ReadSingleParent();
+////            replaceFragment(fr1, TAG_CLASSES);
+//        }
 
-
+        replaceFragment(fr1, TAG_CLASSES);
         ProfileInfo();
     }
 
@@ -135,32 +136,24 @@ public class MainActivity extends AppCompatActivity
             replaceFragment(fr3, TAG_CLASSES);
         } else if (id == R.id.nav_logout) {
 
-
             //showing alert dialog to confirm logout action
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-
             // Setting Dialog Message
-            alertDialog.setMessage(R.string.logout_msg);
+            alertDialog.setMessage(getResources().getString(R.string.logout_msg));
 
             // Setting Negative "logout" Button
             alertDialog.setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-
-                    excuteLogout();
+                    executeLogout();
                 }//end onClick
             });//end setPositiveButton
-
             // Setting Negative "cancel" Button
             alertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-
                     dialog.cancel();
                 }//end onClick
             });//end setNegativeButton
-
-
             alertDialog.show();
-
 
         } else if (id == R.id.nav_profile) {
             replaceFragment(fr2, TAG_CLASSES);
@@ -229,75 +222,75 @@ public class MainActivity extends AppCompatActivity
 //    }
 //
 
-    public void ReadSingleTeacher() {
-        fireStore = FirebaseFirestore.getInstance();
-        String USERID = MySharedPreference.getString(this, "USERID", null);
-        if (USERID != null) {
-            fireStore.collection("teachers").document(USERID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot doc = task.getResult();
+//    public void ReadSingleTeacher() {
+//        fireStore = FirebaseFirestore.getInstance();
+//        String USERID = MySharedPreference.getString(this, "USERID", null);
+//        if (USERID != null) {
+//            fireStore.collection("teachers").document(USERID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        DocumentSnapshot doc = task.getResult();
+//
+//                    }
+//                }
+//            })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(getApplicationContext(), "Failed to read user info", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    });
+//        } else {
+//        }
+//    }
 
-                    }
-                }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Failed to read user info", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-        } else {
-        }
-    }
-
-    public void excuteLogout() {
+    public void executeLogout() {
 
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         fAuth.signOut();
         MySharedPreference.clearData(getApplicationContext());
-        MySharedPreference.clearValue(getApplicationContext(), "USERNAME");
-        MySharedPreference.clearValue(getApplicationContext(), "USERTYPE");
-        MySharedPreference.clearValue(getApplicationContext(), "USERID");
+        MySharedPreference.clearValue(getApplicationContext(), Constants.keys.USER_NAME);
+        MySharedPreference.clearValue(getApplicationContext(), Constants.keys.USER_TYPE);
+        MySharedPreference.clearValue(getApplicationContext(), Constants.keys.USER_ID);
         Intent intent = new Intent(MainActivity.this, LoginSignUpActivity.class);
         startActivity(intent);
         finish();
     }
 
-    public void ReadSingleParent() {
-        fireStore = FirebaseFirestore.getInstance();
-        String USERID = MySharedPreference.getString(this, "USERID", null);
-        if (USERID != null) {
-            fireStore.collection("parents").document(USERID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot doc = task.getResult();
-                        userParent = new Parent(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
-                        MySharedPreference.putString(getApplicationContext(), "USERNAME", userParent.getFirstName() + " " + userParent.getLastName());
-
-                        //                    StringBuilder fields = new StringBuilder("");
-//                    fields.append("Name: ").append(doc.get("firstName"));
-//                    fields.append("\nEmail: ").append(doc.get("email"));
-//                    fields.append("\nPhone: ").append(doc.get("phone"));
-//                    fields.append("\nClasses").append(doc.get("classes"));
-//                    t.setText(fields.toString());
-                    }
-                }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Failed to read user info", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "USER ID is null", Toast.LENGTH_SHORT).show();
-        }
-
-    }
+//    public void ReadSingleParent() {
+//        fireStore = FirebaseFirestore.getInstance();
+//        String USERID = MySharedPreference.getString(this, "USERID", null);
+//        if (USERID != null) {
+//            fireStore.collection("parents").document(USERID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        DocumentSnapshot doc = task.getResult();
+//                        userParent = new Parent(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
+//                        MySharedPreference.putString(getApplicationContext(), "USERNAME", userParent.getFirstName() + " " + userParent.getLastName());
+//
+//                        //                    StringBuilder fields = new StringBuilder("");
+////                    fields.append("Name: ").append(doc.get("firstName"));
+////                    fields.append("\nEmail: ").append(doc.get("email"));
+////                    fields.append("\nPhone: ").append(doc.get("phone"));
+////                    fields.append("\nClasses").append(doc.get("classes"));
+////                    t.setText(fields.toString());
+//                    }
+//                }
+//            })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(getApplicationContext(), "Failed to read user info", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    });
+//        } else {
+//            Toast.makeText(this, "USER ID is null", Toast.LENGTH_SHORT).show();
+//        }
+//
+//    }
 
 }

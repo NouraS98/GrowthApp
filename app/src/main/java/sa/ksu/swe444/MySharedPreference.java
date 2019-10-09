@@ -19,7 +19,7 @@ public class MySharedPreference {
     public static void clearData(Context context){
         SharedPreferences.Editor editor=getInstance(context).edit();
         editor.clear();
-        editor.apply();
+        editor.commit();
 
     }//end of clearData
 

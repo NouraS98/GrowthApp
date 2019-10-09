@@ -45,8 +45,9 @@ public class LoginActivity extends BaseActivity {
     private FirebaseFirestore fireStore;
     private String userId;
     private FirebaseAuth firebaseAuth;
+    static String emailaddress;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private RadioGroup radioGroup;
+    static private RadioGroup radioGroup;
     boolean isTeacher = false;
     boolean isParent = false;
 
@@ -85,6 +86,7 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View view) {
 
                 String usernameInput = emailEditText.getText().toString();
+                emailaddress = usernameInput;
                 String passwordInput = passwordEditText.getText().toString();
 
                 if (usernameInput.equals("") && passwordInput.equals("")) {
@@ -242,22 +244,20 @@ public class LoginActivity extends BaseActivity {
     }// end validateEmail()
 
     public void executeLogin() {
-
         int selectedId = radioGroup.getCheckedRadioButtonId();
         RadioButton roleButton = (RadioButton) findViewById(selectedId);
-        MySharedPreference.putString(getApplicationContext(), USER_TYPE,"Teacher");
         if (roleButton.getText().equals("Teacher")) {
-            if (MySharedPreference.getString(getApplicationContext(), USER_TYPE, "none").equals( "Teacher")) {
+            if (emailaddress.equals("nouraalsabr@hotmail.com")  || emailaddress.equals("0maymona0@hotmail.com")) {
                 ReadTeacher();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             } else {
-                showDialog("User is not registered as Teacher "+MySharedPreference.getString(getApplicationContext(),USER_TYPE,"not registed"));
+                showDialog("User is not registered as Teacher ");
             }
         } else if (roleButton.getText().equals("Parent")) {
-            if (MySharedPreference.getString(getApplicationContext(), USER_TYPE, "none") .equals( "Parent")) {
+            if (!emailaddress.equals("nouraalsabr@hotmail.com")  && !emailaddress.equals("0maymona0@hotmail.com")) {
                 ReadParent();
                 Intent intent = new Intent(LoginActivity.this, ParentMainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -291,6 +291,7 @@ public class LoginActivity extends BaseActivity {
 
     public void ReadTeacher() {
         fireStore = FirebaseFirestore.getInstance();
+        
         String USERID = MySharedPreference.getString(this, USER_ID, null);
         if (USERID != null) {
             fireStore.collection("teachers").document(USERID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
