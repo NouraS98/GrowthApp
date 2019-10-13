@@ -44,14 +44,14 @@ import static sa.ksu.swe444.Constants.keys.USER_TYPE;
 public class ProfileFragment extends Fragment {
 
     private Button save_button_dailog;
-    private EditText editprofile_email, editprofile_name,editprofile_phone;
+    private EditText editprofile_email, editprofile_name, editprofile_phone;
     NavigationView navigationView;
     ImageView logout;
     View v;
     String userId;
     FirebaseFirestore fireStore;
     FirebaseAuth firebaseAuth;
-    TextView nametxtview,emailtxtview,phonetxtview;
+    TextView nametxtview, emailtxtview, phonetxtview;
     ImageView editButton;
     private static final String LOG = ProfileFragment.class.getSimpleName();
 
@@ -73,13 +73,13 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String name = MySharedPreference.getString(getContext(),USER_NAME,":(");
-        String email = MySharedPreference.getString(getContext(),USER_EMAIL,":(");
-        String phone = MySharedPreference.getString(getContext(),USER_PHONE,":(");
-        String type = MySharedPreference.getString(getContext(),USER_TYPE,":(");
-        String uid = MySharedPreference.getString(getContext(),USER_ID,":(");
-        String nid = MySharedPreference.getString(getContext(), USER_NATIONAL_ID,":(");
-        Boolean newuser = MySharedPreference.getBoolean(getContext(),USER_NEW,false);
+        String name = MySharedPreference.getString(getContext(), USER_NAME, ":(");
+        String email = MySharedPreference.getString(getContext(), USER_EMAIL, ":(");
+        String phone = MySharedPreference.getString(getContext(), USER_PHONE, ":(");
+        String type = MySharedPreference.getString(getContext(), USER_TYPE, ":(");
+        String uid = MySharedPreference.getString(getContext(), USER_ID, ":(");
+        String nid = MySharedPreference.getString(getContext(), USER_NATIONAL_ID, ":(");
+        Boolean newuser = MySharedPreference.getBoolean(getContext(), USER_NEW, false);
         nametxtview = getView().findViewById(R.id.nameProfile);
         nametxtview.setText(name);
         phonetxtview = getView().findViewById(R.id.phoneProfile);
@@ -116,7 +116,6 @@ public class ProfileFragment extends Fragment {
         MySharedPreference.putBoolean(getContext(), Constants.keys.IS_LOGIN, true);
 
 
-
     }//end executeGetProfileSetting()
 
     private void editProfile() {
@@ -134,59 +133,61 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!(editprofile_name.getText().toString().matches("")) && !(editprofile_email.getText().toString().matches("")) && !(editprofile_phone.getText().toString().matches(""))) {
-                    if(validateEmail(editprofile_email.getText().toString())&& !editprofile_email.getText().toString().equals(emailtxtview)){
-                        FirebaseUser firebaseUser;
-                        firebaseAuth = FirebaseAuth.getInstance();
-                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                            firebaseUser = firebaseAuth.getCurrentUser();
-                            userId = firebaseUser.getUid();
-                            firebaseUser.updateEmail(editprofile_email.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()) {
-                                        TextView emailchanged = customDialog.findViewById(R.id.email_changed);
-                                        emailchanged.setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            });
-                        }
-                    }else{
-                        TextView emailchanged = customDialog.findViewById(R.id.email_changed);
-                        emailchanged.setText("changes not made");
-                        emailchanged.setTextColor(getResources().getColor(R.color.colorPink));
-                        emailchanged.setVisibility(View.VISIBLE);
-                    }
-                    if(validatePhone(editprofile_phone.getText().toString())&& !editprofile_phone.getText().toString().equals(phonetxtview)) {
+//                    if(validateEmail(editprofile_email.getText().toString())&& !editprofile_email.getText().toString().equals(emailtxtview)){
+//                        FirebaseUser firebaseUser;
+//                        firebaseAuth = FirebaseAuth.getInstance();
+//                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+//                            firebaseUser = firebaseAuth.getCurrentUser();
+//                            userId = firebaseUser.getUid();
+//                            firebaseUser.updateEmail(editprofile_email.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    if(task.isSuccessful()) {
+//                                        TextView emailchanged = customDialog.findViewById(R.id.email_changed);
+//                                        emailchanged.setVisibility(View.VISIBLE);
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    }else{
+//                        TextView emailchanged = customDialog.findViewById(R.id.email_changed);
+//                        emailchanged.setText("changes not made");
+//                        emailchanged.setTextColor(getResources().getColor(R.color.colorPink));
+//                        emailchanged.setVisibility(View.VISIBLE);
+//                    }
+                    if (validatePhone(editprofile_phone.getText().toString()) && !editprofile_phone.getText().toString().equals(phonetxtview)) {
                         fireStore = FirebaseFirestore.getInstance();
+                        firebaseAuth = FirebaseAuth.getInstance();
                         FirebaseUser firebaseUser;
                         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                             firebaseUser = firebaseAuth.getCurrentUser();
                             userId = firebaseUser.getUid();
-                            fireStore.collection("teachers").document(userId).update("phone",editprofile_phone.getText().toString())
+                            fireStore.collection("teachers").document(userId).update("phone", editprofile_phone.getText().toString())
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()) {
+                                            if (task.isSuccessful()) {
                                                 TextView phonechanged = customDialog.findViewById(R.id.phone_changed);
                                                 phonechanged.setVisibility(View.VISIBLE);
+                                                phonetxtview.setText(editprofile_phone.getText().toString());
+                                                customDialog.dismiss();
+                                                showDialog("phone changed successfully");
+
                                             }
                                         }
                                     });
                         }
-                    }else{
+                    } else {
                         TextView phonechanged = customDialog.findViewById(R.id.phone_changed);
-                        phonechanged.setText("changes not made");
+                        phonechanged.setText("incorrect format");
                         phonechanged.setTextColor(getResources().getColor(R.color.colorPink));
                         phonechanged.setVisibility(View.VISIBLE);
+                        showDialog("please enter correct phone number");
                     }
-                    showDialog("phone changed successfully");
-                    emailtxtview.setText(editprofile_email.getText().toString());
-                    phonetxtview.setText(editprofile_phone.getText().toString());
-                    customDialog.dismiss();
-                }//End if block
-                else {
+                } else {
                     showDialog("changes not made successfully");
                 }
+                //customDialog.dismiss();
             }//End  onClick() //for forgotPassDialog_sendBtn btn
         });
     }//End forgetPasswordAction
@@ -203,8 +204,7 @@ public class ProfileFragment extends Fragment {
                         alertDialog.dismiss();
                     }//End onClick()
                 });//End BUTTON_POSITIVE
-        if(!getActivity().isFinishing())
-        {
+        if (!getActivity().isFinishing()) {
             alertDialog.show();
         }
 

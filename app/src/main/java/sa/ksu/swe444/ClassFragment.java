@@ -1,5 +1,8 @@
 package sa.ksu.swe444;
 
+import android.app.AlertDialog;
+import java.lang.*;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -85,12 +88,17 @@ public class ClassFragment extends Fragment {
 
                         // Add an item to animals list
                         Class a = new Class(class_name.getText() + "", R.drawable.wooden);
+                        if(class_name.getText().toString().equals("") || class_name.getText().toString().trim().equals("") ){
+                            customDialog.dismiss();
+                            showDialog("Class can't have an empty name!");
+                        } else {
 
-                        albumList.add(a);
-                        saveClass(a);
-                        adapter.notifyItemInserted(++position);
-                        recyclerView.scrollToPosition(position);
-                        customDialog.dismiss();
+                            albumList.add(a);
+                            saveClass(a);
+                            adapter.notifyItemInserted(++position);
+                            recyclerView.scrollToPosition(position);
+                            customDialog.dismiss();
+                        }
 
                     }//End  onClick() //for forgotPassDialog_sendBtn btn
                 });
@@ -289,4 +297,22 @@ public class ClassFragment extends Fragment {
 //            showDialog("User not found. Error");
 //        }
 //    }//end ReadTeacher
+public void showDialog(String msg) {
+
+    final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+    alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.dialogbackground));
+    alertDialog.setMessage(msg);
+    alertDialog.setIcon(R.mipmap.ic_launcher);
+    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.okay),
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    alertDialog.dismiss();
+                }//End onClick()
+            });//End BUTTON_POSITIVE
+
+    alertDialog.show();
+
+
+}//end showDialog
 }
