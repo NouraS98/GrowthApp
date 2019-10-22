@@ -156,6 +156,8 @@ public class MainActivity extends AppCompatActivity
             alertDialog.show();
 
         } else if (id == R.id.nav_profile) {
+            toolbar.setTitle("Profile");
+
             replaceFragment(fr2, TAG_CLASSES);
         }
 

@@ -59,4 +59,12 @@
     <string name="menu_myInfo">Profile</string>
     <string name="CreateClass">Create class</string>
     <string name="enter_class">Enter Class name</string>
+    <string name="title_activity_class_main">ClassMainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_students">Students</string>
+    <string name="title_notifications">Calendar</string>
+    <string name="title_setting">Setting</string>
+    <string name="CreateEvent">Create Event</string>
+    <string name="add_student">Add Student</string>
+    <string name="student_email">Student Email</string>
 </resources>

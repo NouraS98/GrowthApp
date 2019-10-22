@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.skyhope.eventcalenderlibrary.CalenderEvent
+        android:id="@+id/calender_event"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:current_month_day_color="@color/colorAccent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:month_color="@color/colorPrimaryDark"
+        app:next_icon="@drawable/ic_arrow_forward_ios"
+        app:off_month_day_color="@color/colorPrimaryDark"
+        app:previous_icon="@drawable/ic_arrow_back_ios"
+        app:selector_color="@color/colorPrimary"
+        app:week_name_color="@color/colorPrimaryDark"
+        >
+
+
+
+    </com.skyhope.eventcalenderlibrary.CalenderEvent>
+
+    <Button
+        android:id="@+id/eventButton"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="100dp"
+        android:layout_weight="1"
+        android:text="Add Event"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

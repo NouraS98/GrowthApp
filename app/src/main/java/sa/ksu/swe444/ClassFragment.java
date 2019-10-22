@@ -3,6 +3,7 @@ package sa.ksu.swe444;
 import android.app.AlertDialog;
 import java.lang.*;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -106,20 +107,21 @@ public class ClassFragment extends Fragment {
             }
         });
 
-//        adapter.setOnItemClickListener(new ClassAdapter().OnItemClickListener() {
-//            @Override
-////            public void onItemClick(int position) {
-////
-////                Intent intent;
-////                Class a = albumList.get(position);
-////                intent = new Intent(getActivity(), Questions.class);
-////                intent.putExtra("title" ,a.getName()  );
-////
-////                startActivity(intent);
-////
-////
-////            }
-//        });
+        adapter.setOnItemClickListener(new ClassAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(long id) {
+                Intent intent;
+              //  Class a = albumList.get(position);
+                intent = new Intent(getActivity(), ClassMainActivity.class);
+
+//                intent.putExtra("title" ,a.getName()  );
+
+                startActivity(intent);
+            }
+        });
+
+
+
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="0dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/profilegradient"
+    android:weightSum="10">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+               >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp">
+
+
+
+                    <LinearLayout
+                        android:id="@+id/profile_layout"
+                        android:layout_width="322dp"
+                        android:layout_height="450dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="40dp"
+
+                        android:layout_marginEnd="40dp"
+                        android:background="@drawable/profile_shape"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingBottom="24dp">
+
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            xmlns:tools="http://schemas.android.com/tools"
+
+                            android:id="@+id/cameralayout"
+                            android:layout_width="180dp"
+                            android:layout_height="180dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="30dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical"
+
+                            tools:context=".LoginActivity">
+
+                            <ImageView
+                                android:id="@+id/imgBtn"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="end"
+                                android:layout_margin="5dp"
+                                android:layout_weight="1"
+                                app:srcCompat="@drawable/ic_camera_alt_black_24dp" />
+
+                            <ImageView
+                                android:id="@+id/signupImg"
+                                android:layout_width="148dp"
+                                android:layout_height="117dp"
+                                android:layout_gravity="end"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/wooden" />
+
+                        </LinearLayout>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp">
+
+                            <ImageView
+                                android:id="@+id/edit_button_profile"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="right"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:contentDescription="camera"
+                                app:srcCompat="@drawable/ic_edit" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:fontFamily="@font/tajawalbold"
+                                android:inputType="textNoSuggestions"
+                                android:text="Name:"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="@dimen/text_size" />
+
+                            <TextView
+                                android:id="@+id/className"
+                                android:layout_width="213dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:hint="Name"
+                                android:inputType="textNoSuggestions"
+                                android:text=""
+                                android:textSize="@dimen/text_size"
+
+                                />
+
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp">
+
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/button"
+                            android:layout_width="150dp"
+                            android:layout_height="60dp"
+                            android:text="Delete Class" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+</LinearLayout>

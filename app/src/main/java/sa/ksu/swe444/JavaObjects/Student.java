@@ -11,6 +11,39 @@ public class Student {
     String motherID;
     String fatherID;
     String classID;
+    String email;
+    String fullName;
+    int img;
+
+    public Student(String email, String fullName, int img) {
+        this.email = email;
+        this.fullName = fullName;
+        this.img = img;
+    }
+
+    public int getImg() {
+        return img;
+    }
+
+    public void setImg(int img) {
+        this.img = img;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Student() {
     }
