@@ -30,6 +30,12 @@ public class PreferenceHelper {
     public PreferenceHelper(Context context) {
         mSharedPreferences = context.getSharedPreferences("EventCalender", Context.MODE_PRIVATE);
     }
+    public  void clearData(Context context){
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.clear();
+        mEditor.commit();
+
+    }//end of clearData
 
     public void write(String key, String value) {
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();

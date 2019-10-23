@@ -67,7 +67,6 @@ public class SignUpActivity extends BaseActivity {
         confirmPassEditText = findViewById(R.id.signup_confirm_passwordET);
         signUpBtn = findViewById(R.id.signupPageBtn);
 
-
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +205,6 @@ public class SignUpActivity extends BaseActivity {
                     }
                 }
             });
-
 
             Parent parent = new Parent(firstNameInput, lastNameInput, emailAddressInput, phoneInput, idInput);
             fireStore.collection("parents").document(userId).set(parent).addOnSuccessListener(new OnSuccessListener<Void>() {

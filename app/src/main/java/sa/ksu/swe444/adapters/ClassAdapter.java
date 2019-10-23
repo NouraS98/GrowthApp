@@ -47,15 +47,15 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.MyViewHolder
             title.setOnClickListener(new View.OnClickListener() {
                 @Override
 
-                    public void onClick(View v) {
-                        if (listener != null) {
-                            int position = getAdapterPosition();
-                            if (position != RecyclerView.NO_POSITION) {
-                                listener.onItemClick(position);
-                            }
-                        }
-                    }
+                public void onClick(View v) {
+                    String name;
+                    name = departmentList.get(getAdapterPosition()).getName();
+                    String id = departmentList.get(getAdapterPosition()).getId();
 
+                    listener.onItemClick(name, id);
+
+
+                }
 
             });
 
@@ -91,7 +91,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.MyViewHolder
     } //  end onBindViewHolder
 
     public interface OnItemClickListener {
-        void onItemClick( long id);
+        void onItemClick( String name, String id);
     } // end OnItemClickListener
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -103,3 +103,4 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.MyViewHolder
         return departmentList.size();
     } // end getItemCount
 }
+

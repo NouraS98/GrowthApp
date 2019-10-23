@@ -16,10 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -30,10 +28,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -42,17 +37,13 @@ import java.util.List;
 import java.util.UUID;
 
 import sa.ksu.swe444.JavaObjects.Class;
-import sa.ksu.swe444.JavaObjects.Parent;
-import sa.ksu.swe444.JavaObjects.Teacher;
-import sa.ksu.swe444.JavaObjects.User;
 import sa.ksu.swe444.adapters.ClassAdapter;
 
-import static sa.ksu.swe444.Constants.keys.USER_EMAIL;
+import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
-import static sa.ksu.swe444.Constants.keys.USER_NAME;
-import static sa.ksu.swe444.Constants.keys.USER_PHONE;
 
-public class ClassFragment extends Fragment {
+
+public class ClassFragment extends Fragment   implements ClassAdapter.OnItemClickListener{
 
     private RecyclerView recyclerView;
     private ClassAdapter adapter;
@@ -60,7 +51,7 @@ public class ClassFragment extends Fragment {
     Button create_class;
     TextView class_name;
     private FirebaseFirestore fireStore;
-    int position = 4;
+    int position = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.home, container, false);
@@ -96,7 +87,7 @@ public class ClassFragment extends Fragment {
 
                             albumList.add(a);
                             saveClass(a);
-                            adapter.notifyItemInserted(++position);
+                            adapter.notifyItemInserted(position);
                             recyclerView.scrollToPosition(position);
                             customDialog.dismiss();
                         }
@@ -107,32 +98,31 @@ public class ClassFragment extends Fragment {
             }
         });
 
-        adapter.setOnItemClickListener(new ClassAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(long id) {
-                Intent intent;
-              //  Class a = albumList.get(position);
-                intent = new Intent(getActivity(), ClassMainActivity.class);
-
-//                intent.putExtra("title" ,a.getName()  );
-
-                startActivity(intent);
-            }
-        });
-
-
 
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
         prepareClasses();
         ReadClasses();
         return v;
     }
+
+
+    public void onClassSelect(String departmentName, String id) {
+        Intent intent = new Intent(getContext(), ClassMainActivity.class);
+        intent.putExtra(Constants.keys.title, departmentName);
+         MySharedPreference.putString(getContext(),CLICKED_CLASS,id);
+
+        intent.putExtra(CLICKED_CLASS, id);
+        startActivity(intent);
+    }
+
+
 
     private void saveClass(Class a) {
         fireStore = FirebaseFirestore.getInstance();
@@ -159,19 +149,24 @@ public class ClassFragment extends Fragment {
                 R.drawable.cat
         };
 
-        Class a = new Class("Butterflies", covers[0]);
-        albumList.add(a);
-
-        a = new Class("Flowers", covers[1]);
-        albumList.add(a);
-
-        a = new Class("Apples", covers[2]);
-        albumList.add(a);
-
-        a = new Class("Kittens", covers[3]);
-        albumList.add(a);
+//        Class a = new Class("Butterflies", covers[0]);
+//        albumList.add(a);
+//
+//        a = new Class("Flowers", covers[1]);
+//        albumList.add(a);
+//
+//        a = new Class("Apples", covers[2]);
+//        albumList.add(a);
+//
+//        a = new Class("Kittens", covers[3]);
+//        albumList.add(a);
 
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClick(String name, String id) {
+        onClassSelect(name, id);
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -226,7 +221,7 @@ public class ClassFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Class a = new Class(document.get("name").toString(),R.drawable.wooden);
+                                Class a = new Class(document.get("name").toString(),R.drawable.wooden,document.getId());
                                 albumList.add(a);
                                 adapter.notifyItemInserted(++position);
                                 recyclerView.scrollToPosition(position);
@@ -239,82 +234,24 @@ public class ClassFragment extends Fragment {
                         }
                     }
                 });
-//
-//        fireStore.collection("classes")
-//                .whereEqualTo("teacher", USERID)
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot value,
-//                                        @Nullable FirebaseFirestoreException e) {
-//                        if (e != null) {
-//                            Log.w("SNAPSHOT", "Listen failed.", e);
-//                            return;
-//                        }
-//
-//                        List<String> cities = new ArrayList<>();
-//                        for (QueryDocumentSnapshot doc : value) {
-//                            Class a = new Class(doc.get("name").toString(),R.drawable.apple);
-//                            for(int i=0; i<albumList.size();i++){
-//                                if((albumList.get(i).getName()!=doc.get("name").toString())){
-//                                    albumList.add(a);
-//                                    adapter.notifyItemInserted(++position);
-//                                    recyclerView.scrollToPosition(position);
-//                                    adapter.notifyDataSetChanged();
-//                                }
-//                            }
-//
-//                        }
-//                        Log.d("SNAPSHOT", "Current cites in CA: " + cities);
-//                    }
-//                });
     }
-//    public void ReadClasses() {
-//        fireStore = FirebaseFirestore.getInstance();
-//        String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
-//        if (USERID != null) {
-//            fireStore.collection("teachers").document(USERID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot doc = task.getResult();
-//                        if (doc.exists()) {
-//                            User userTeacher = new Teacher(doc.get("firstName").toString(), doc.get("lastName").toString(), doc.get("email").toString(), doc.get("phone").toString());
-//                            MySharedPreference.putString(getApplicationContext(), USER_NAME, userTeacher.getFirstName() + " " + userTeacher.getLastName());
-//                            MySharedPreference.putString(getApplicationContext(), USER_EMAIL, userTeacher.getEmail());
-//                            MySharedPreference.putString(getApplicationContext(), USER_PHONE, userTeacher.getPhone());
-//                        } else {
-//                            showDialog("User not registered as teacher");
-//                        }
-//                    }//if task successful
-//                }
-//            })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Toast.makeText(getApplicationContext(), "Failed to read user info", Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                    });
-//        } else {
-//            showDialog("User not found. Error");
-//        }
-//    }//end ReadTeacher
-public void showDialog(String msg) {
 
-    final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-    alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.dialogbackground));
-    alertDialog.setMessage(msg);
-    alertDialog.setIcon(R.mipmap.ic_launcher);
-    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.okay),
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    alertDialog.dismiss();
-                }//End onClick()
-            });//End BUTTON_POSITIVE
+    public void showDialog(String msg) {
 
-    alertDialog.show();
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.dialogbackground));
+        alertDialog.setMessage(msg);
+        alertDialog.setIcon(R.mipmap.ic_launcher);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.okay),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alertDialog.dismiss();
+                    }//End onClick()
+                });//End BUTTON_POSITIVE
+
+        alertDialog.show();
 
 
-}//end showDialog
+    }//end showDialog
 }

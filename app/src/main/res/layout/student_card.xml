@@ -43,7 +43,7 @@
 
             <TextView
                 android:id="@+id/student_name"
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
                 android:layout_marginBottom="9dp"
@@ -52,12 +52,12 @@
                 android:paddingTop="@dimen/album_title_padding"
                 android:paddingEnd="@dimen/album_title_padding"
                 android:textColor="@color/colorWhite"
-                android:fontFamily="@font/tajawalregular"
+                android:fontFamily="@font/tajawalbold"
                 android:textSize="@dimen/text_size" />
 
             <TextView
                 android:id="@+id/student_email"
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
                 android:layout_marginBottom="9dp"

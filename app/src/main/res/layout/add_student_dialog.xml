@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:hint="@string/student_email"
+        android:hint="Enter student Code"
         android:textSize="@dimen/text_size"
         android:inputType="textEmailAddress"
         android:maxLength="225" />

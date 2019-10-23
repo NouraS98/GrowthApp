@@ -17,6 +17,22 @@ public class Event {
     private long time;
     private String eventText;
     private int eventColor;
+    private String classId;
+
+    public Event(long time, String eventText, int eventColor, String classId) {
+        this.time = time;
+        this.eventText = eventText;
+        this.eventColor = eventColor;
+        this.classId = classId;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
 
     public Event(long time, String eventText) {
         this.time = time;

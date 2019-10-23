@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-//import android.support.annotation.Nullable;
-//import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -17,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -27,8 +23,6 @@ import com.skyhope.eventcalenderlibrary.helper.TimeUtil;
 import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
 import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
 import com.skyhope.eventcalenderlibrary.model.Event;
-
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -132,7 +126,9 @@ public class CalenderEvent extends LinearLayout implements View.OnClickListener 
         preferenceHelper = PreferenceHelper.init(context);
     }
 
-
+    public void clearPrefrance(){
+        preferenceHelper.clearData(getContext());
+    }
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -642,6 +638,5 @@ public class CalenderEvent extends LinearLayout implements View.OnClickListener 
     public void initCalderItemClickCallback(CalenderDayClickListener listener) {
         this.mCalenderDayClickListener = listener;
     }
-
 
 }

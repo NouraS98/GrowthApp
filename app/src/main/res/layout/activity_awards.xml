@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="330dp"
+        android:layout_height="600dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/dialogbackground"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp">
+
+            <TextView
+                android:id="@+id/student_name"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="false"
+                android:gravity="center"
+                android:paddingTop="10px"
+                android:text="Student Name"
+                android:textColor="@color/colorPrimaryDark"
+                android:textIsSelectable="false"
+                android:textSize="30sp" />
+
+        </RelativeLayout>
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/award_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:ems="10"
+            android:hint="              Notes for parent"
+            android:inputType="text"
+            android:maxLength="100"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/goodJob_awards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"
+            android:background="#F3F2F2"
+            android:textColor="@color/colorPrimaryDark"
+            android:paddingLeft="25px"
+            android:paddingTop="10px"
+            android:text="Good Job"
+            android:textSize="@dimen/text_size" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="100dp">
+
+                <ImageView
+                    android:id="@+id/helpingothersimg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:src="@drawable/hand_helpother"></ImageView>
+
+                <TextView
+                    android:id="@+id/helpingOthers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="80dp"
+                    android:text="Helping Others"
+                    android:textColor="@color/colorPink"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/helpingotherspoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="90dp"
+                    android:layout_marginTop="5dp"
+                    android:text="0"
+                    android:textColor="#4CAF50"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="110dp">
+
+                <ImageView
+                    android:id="@+id/hardworkimg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:src="@drawable/hammer_hardwork"></ImageView>
+
+                <TextView
+                    android:id="@+id/hardWork"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="80dp"
+                    android:textColor="@color/colorPink"
+                    android:text="Hard Worker"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/hardworkpoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="90dp"
+                    android:layout_marginTop="5dp"
+                    android:text="0"
+                    android:textColor="#4CAF50"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="220dp">
+
+                <ImageView
+                    android:id="@+id/ontaskimg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:src="@drawable/notepad_ontask"></ImageView>
+
+                <TextView
+                    android:id="@+id/onTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="33dp"
+                    android:layout_marginTop="80dp"
+                    android:text="On task"
+                    android:textColor="@color/colorPink"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/ontaskpoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="90dp"
+                    android:layout_marginTop="5dp"
+                    android:text="0"
+                    android:textColor="#4CAF50"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="100dp">
+
+                <ImageView
+                    android:id="@+id/teamworkimg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:src="@drawable/teamwork_shirt"></ImageView>
+
+                <TextView
+                    android:id="@+id/teamWork"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="28dp"
+                    android:textColor="@color/colorPink"
+                    android:layout_marginTop="80dp"
+                    android:text="Teamwork"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/teamworkpoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="90dp"
+                    android:layout_marginTop="5dp"
+                    android:text="0"
+                    android:textColor="#4CAF50"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/needsWork_awards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"
+            android:background="#F3F2F2"
+            android:paddingLeft="25px"
+            android:textColor="@color/colorPrimaryDark"
+            android:paddingTop="10px"
+            android:text="Needs Work"
+            android:textSize="@dimen/text_size" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="100dp">
+
+                <ImageView
+                    android:id="@+id/disrespectimg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:src="@drawable/thunder_disrespect"></ImageView>
+
+                <TextView
+                    android:id="@+id/disrespect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="80dp"
+                    android:text="disrespectful"
+                    android:textColor="@color/colorPink"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/disrespectpoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="90dp"
+                    android:layout_marginTop="5dp"
+                    android:text="0"
+                    android:textColor="#F44336"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

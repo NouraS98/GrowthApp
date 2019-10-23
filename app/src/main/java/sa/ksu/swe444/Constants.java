@@ -17,6 +17,8 @@ public class Constants {
         final String title = "Title";
         final String posotion = "position";
         final String sectionType = "sectionType";
+        String CLICKED_CLASS = "CLICKED_CLASS";
 
+        String CLICKED_STUDENT = "CLICKED_STUDENT" ;
     }
 }

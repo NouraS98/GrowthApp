@@ -13,7 +13,12 @@ public class Class {
     int numberOfStudents;
     String teacher;
     int img;
+    String classid;
 
+    public Class(String name, int img) {
+        this.name = name;
+        this.img = img;
+    }
 
     public Class() {
     }
@@ -22,7 +27,6 @@ public class Class {
         this.name = name;
         this.teacher = teacher;
     }
-
     public String getName() {
         return name;
     }
@@ -70,9 +74,18 @@ public class Class {
         this.img = img;
     }
 
-    public Class(String name, int img) {
+    public Class(String name, int img, String classid) {
         this.name = name;
         this.img = img;
+        this.classid=classid;
+    }
+
+    public String getId() {
+        return classid;
+    }
+
+    public void setClassid(String classid) {
+        this.classid = classid;
     }
 }
 
