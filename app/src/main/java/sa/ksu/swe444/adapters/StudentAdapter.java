@@ -51,12 +51,12 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.MyViewHo
                 @Override
 
                 public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
-                    }
+                    String name;
+                    name = departmentList.get(getAdapterPosition()).getFullName();
+                    String id = departmentList.get(getAdapterPosition()).getId();
+                    if(listener!=null)
+                    listener.onItemClick(name, id);
+
                 }
 
 
@@ -98,7 +98,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.MyViewHo
     } //  end onBindViewHolder
 
     public interface OnItemClickListener {
-        void onItemClick( long id);
+        void onItemClick( String name, String id);
     } // end OnItemClickListener
 
     public void setOnItemClickListener(OnItemClickListener listener) {

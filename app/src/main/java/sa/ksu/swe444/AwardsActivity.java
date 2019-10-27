@@ -54,7 +54,7 @@ public class AwardsActivity extends AppCompatActivity {
         studentID = MySharedPreference.getString(getApplicationContext(), Constants.keys.CLICKED_STUDENT, "NONE");
 
         student_name = findViewById(R.id.student_name);
-        student_name.setText("Noura Alsabr");
+        student_name.setText(MySharedPreference.getString(getApplicationContext(),"STUDENT_NAME","NONE"));
 
 
         helpingothersimg = findViewById(R.id.helpingothersimg);

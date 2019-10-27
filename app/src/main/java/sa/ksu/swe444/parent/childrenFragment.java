@@ -1,4 +1,4 @@
-package sa.ksu.swe444.ui.dashboard;
+package sa.ksu.swe444.parent;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.skyhope.eventcalenderlibrary.model.Event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,12 +40,10 @@ import java.util.Map;
 
 import sa.ksu.swe444.AddStudentDialog;
 import sa.ksu.swe444.AwardsActivity;
-import sa.ksu.swe444.ClassMainActivity;
 import sa.ksu.swe444.Constants;
 import sa.ksu.swe444.JavaObjects.Class;
+import sa.ksu.swe444.JavaObjects.Post;
 import sa.ksu.swe444.JavaObjects.Student;
-import sa.ksu.swe444.LoginActivity;
-import sa.ksu.swe444.MainActivity;
 import sa.ksu.swe444.MySharedPreference;
 import sa.ksu.swe444.R;
 import sa.ksu.swe444.adapters.StudentAdapter;
@@ -53,7 +52,7 @@ import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS;
 import static sa.ksu.swe444.Constants.keys.CLICKED_STUDENT;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
 
-public class StudentsFragment extends Fragment   implements StudentAdapter.OnItemClickListener{
+public class childrenFragment extends Fragment   implements StudentAdapter.OnItemClickListener{
 
 
     private RecyclerView recyclerView;
@@ -65,6 +64,7 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
     private FirebaseAuth firebaseAuth;
     String userId;
     private FirebaseFirestore fireStore;
+
     ArrayList<String> classesIDs  = new ArrayList<>();
 
     ArrayList<String> students_in_class_array = new ArrayList<>();
@@ -73,9 +73,7 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
-
-        View root = inflater.inflate(R.layout.fragment_students, container, false);
+        View root = inflater.inflate(R.layout.fragment_children, container, false);
         recyclerView = (RecyclerView) root.findViewById(R.id.Students_recycler_view);
 
         albumList = new ArrayList<>();
@@ -112,12 +110,12 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         if (documentSnapshot.exists()) {
-                                            //check if student is in the class already
-                                            //StudentInClass(studentID);
-                                            Student a = new Student(documentSnapshot.get("parentemail").toString(), documentSnapshot.get("name").toString(), R.drawable.apple);
-                                            albumList.add(a);
 
-                                            addToClassInFirestore(documentSnapshot.getId());
+                                            searchStudentinFirebase();
+
+                                            Student a = new Student(documentSnapshot.get("parentemail").toString(), documentSnapshot.get("name").toString(), R.drawable.apple);
+
+                                            albumList.add(a);
                                             adapter.notifyItemInserted(++position);
                                             recyclerView.scrollToPosition(position);
                                             customDialog.dismiss();
@@ -178,14 +176,27 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
         return false;
     }
 
-    private void addToClassInFirestore(String studentID) {
+    private ArrayList<String> searchStudentinFirebase() {
+
         fireStore = FirebaseFirestore.getInstance();
-        Map<String, Object> studentData = new HashMap<>();
-        studentData.put("studentId", studentID);
-        String classid = MySharedPreference.getString(getContext(), CLICKED_CLASS, "NONE");
-        fireStore.collection("classes").document(classid).collection("class_students")
-                .document(studentID).set(studentData, SetOptions.merge());
-        //documentReference.addSnapshotListener()
+        fireStore.collection("classes").document().collection("class_students")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                classesIDs.add(document.getId());
+                                Log.d("TAG", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+
+                    }
+                });
+        return classesIDs;
+
     }
 
 
@@ -217,7 +228,7 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
     @Override
     public void onItemClick(String name, String id) {
         Intent intent = new Intent(getContext(), AwardsActivity.class);
-       // intent.putExtra(Constants.keys.title, departmentName);
+        // intent.putExtra(Constants.keys.title, departmentName);
         MySharedPreference.putString(getContext(),CLICKED_STUDENT,id);
 
         MySharedPreference.putString(getContext(),"STUDENT_NAME",name);
@@ -320,29 +331,6 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
                         }
                     }
                 });
-
-    }
-
-    private ArrayList<String> searchStudentinFirebase() {
-
-        fireStore = FirebaseFirestore.getInstance();
-        fireStore.collection("classes").document().collection("class_students")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                classesIDs.add(document.getId());
-                                Log.d("HELP1", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d("HELP", "Error getting documents: ", task.getException());
-                        }
-
-                    }
-                });
-        return classesIDs;
 
     }
 }

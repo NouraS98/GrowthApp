@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity
 //        }
 
         replaceFragment(fr1, TAG_CLASSES);
+        toolbar.setTitle("My Classes");
         ProfileInfo();
     }
 

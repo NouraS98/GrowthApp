@@ -28,4 +28,5 @@
         android:name="sa.ksu.swe444.ui.SettingFragment"
         android:label="@string/title_setting"
         tools:layout="@layout/fragment_setting" />
+
 </navigation>

@@ -6,6 +6,17 @@
     android:orientation="vertical">
 
 
+    <TextView
+        android:id="@+id/nopostsyet"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:text="no shared posts"
+        android:textColor="#999999"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:visibility="gone"
+        ></TextView>
+
 <!--    <TextView-->
 <!--        android:id="@+id/textView"-->
 <!--        android:layout_width="match_parent"-->
@@ -28,7 +39,6 @@
         android:layout_weight="0.5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/gotoupload"
         android:layout_width="wrap_content"

@@ -51,7 +51,6 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.MyViewHolder
                     String name;
                     name = departmentList.get(getAdapterPosition()).getName();
                     String id = departmentList.get(getAdapterPosition()).getId();
-
                     listener.onItemClick(name, id);
 
 

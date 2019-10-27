@@ -173,7 +173,6 @@ public class PostFragment extends Fragment implements RecyclerAdapter.OnItemClic
                    @Override
                    public void onSuccess(Void aVoid) {
                        Toast.makeText(getContext(), "Item deleted", Toast.LENGTH_SHORT).show();
-
                        mTeachers.remove(position);
                        mAdapter.notifyDataSetChanged();
                        mProgressBar.setVisibility(View.GONE);

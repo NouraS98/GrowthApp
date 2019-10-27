@@ -42,7 +42,7 @@ import sa.ksu.swe444.JavaObjects.Post;
 import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
 
-public class Upload_post extends AppCompatActivity {
+public class Upload_post extends BaseActivity {
 
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -96,7 +96,11 @@ public class Upload_post extends AppCompatActivity {
                 if (mUploadTask != null && mUploadTask.isInProgress()) {
                     Toast.makeText(Upload_post.this, "An Upload is Still in Progress", Toast.LENGTH_SHORT).show();
                 } else {
-                    uploadFile();
+                    if(nameEditText.getText().toString().equals("") || nameEditText.getText().toString().trim().equals("") ){
+                        showDialog("Please enter post title");
+                    }else{
+                        uploadFile();
+                    }
                 }
             }
         });
@@ -202,5 +206,8 @@ public class Upload_post extends AppCompatActivity {
     private void openImagesActivity(){
         Intent intent = new Intent(this, ClassMainActivity.class);
         startActivity(intent);
+        finish();
     }
+
+
 }
