@@ -1,5 +1,6 @@
 package sa.ksu.swe444.parent;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,7 +33,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-import com.skyhope.eventcalenderlibrary.model.Event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,11 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import sa.ksu.swe444.AddChildrenDialog;
-import sa.ksu.swe444.AddStudentDialog;
-import sa.ksu.swe444.AwardsActivity;
-import sa.ksu.swe444.Constants;
-import sa.ksu.swe444.JavaObjects.Class;
-import sa.ksu.swe444.JavaObjects.Post;
 import sa.ksu.swe444.JavaObjects.Student;
 import sa.ksu.swe444.MySharedPreference;
 import sa.ksu.swe444.ParentAwardsActivity;
@@ -54,7 +50,7 @@ import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS;
 import static sa.ksu.swe444.Constants.keys.CLICKED_STUDENT;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
 
-public class childrenFragment extends Fragment   implements StudentAdapter.OnItemClickListener{
+public class childrenFragment extends Fragment implements StudentAdapter.OnItemClickListener{
 
 
     private RecyclerView recyclerView;
@@ -97,7 +93,7 @@ public class childrenFragment extends Fragment   implements StudentAdapter.OnIte
 
                         // Add an item to animals list
                         if (studentcode.getText().toString().equals("") || studentcode.getText().toString().trim().equals("")) {
-                            customDialog.dismiss();
+//                            customDialog.dismiss();
                             // showDialog("Class can't have an empty name!");
                         } else {
 
@@ -113,16 +109,17 @@ public class childrenFragment extends Fragment   implements StudentAdapter.OnIte
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         if (documentSnapshot.exists()) {
 
-                                            searchStudentinFirebase();
-
                                             Student a = new Student(documentSnapshot.get("parentemail").toString(), documentSnapshot.get("name").toString(), R.drawable.apple);
+
+                                            addStudentClassToParent(studentID);
 
                                             albumList.add(a);
                                             adapter.notifyItemInserted(++position);
                                             recyclerView.scrollToPosition(position);
                                             customDialog.dismiss();
+
                                         } else {
-                                            //show dialog that student is not registered
+                                            showDialog("Student is not registered in our system, please contact the school.");
                                         }//end if exists
                                     }
                                 });
@@ -162,69 +159,25 @@ public class childrenFragment extends Fragment   implements StudentAdapter.OnIte
         return root;
     }
 
-    private boolean StudentInClass(String studentID) {
-        String classID = MySharedPreference.getString(getContext(), CLICKED_CLASS, "NONE");
-        final DocumentReference docRef = fireStore.collection("classes").document(classID);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
+    private void addStudentClassToParent(String childId) {
 
-                } else {
-                    //show dialog that student is not registered
-                }//end if exists
-            }
-        });
-        return false;
-    }
-
-    private ArrayList<String> searchStudentinFirebase() {
-
+        final String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
         fireStore = FirebaseFirestore.getInstance();
-        fireStore.collection("classes").document().collection("class_students")
-                .get()
+        fireStore.collection("students").document(childId).collection("classes").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                classesIDs.add(document.getId());
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        if(task.isSuccessful()){
+                          for( QueryDocumentSnapshot doc : task.getResult()){
+                              Map<String, Object> classData = new HashMap<>();
+                              classData.put("classID", doc.getData());
+                              fireStore.collection("parents").document(USERID).collection("classes")
+                                      .document(doc.getId()).set(classData, SetOptions.merge());
+                          }
                         }
-
                     }
                 });
-        return classesIDs;
 
-    }
-
-
-    private void prepareAlbums() {
-
-
-        int[] covers = new int[]{
-                R.drawable.apple,
-                R.drawable.flower,
-                R.drawable.apple,
-                R.drawable.flower
-        };
-
-        Student a = new Student(MySharedPreference.getString(getContext(), CLICKED_CLASS, "not saved"), "Noura", covers[0]);
-        albumList.add(a);
-
-        a = new Student("rahaf@hotmail.com ", "Rahaf", covers[1]);
-        albumList.add(a);
-
-        a = new Student("shahad@hotmail.com ", "Shahad", covers[2]);
-        albumList.add(a);
-
-        a = new Student("may@hotmail.com ", "Matmouna", covers[3]);
-        albumList.add(a);
-
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -335,4 +288,24 @@ public class childrenFragment extends Fragment   implements StudentAdapter.OnIte
                 });
 
     }
+
+    public void showDialog(String msg) {
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.dialogbackground));
+        alertDialog.setMessage(msg);
+        alertDialog.setIcon(R.mipmap.ic_launcher);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.okay),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alertDialog.dismiss();
+                    }//End onClick()
+                });//End BUTTON_POSITIVE
+        if(!getActivity().isFinishing())
+        {
+            alertDialog.show();
+        }
+
+    }//end showDialog
 }

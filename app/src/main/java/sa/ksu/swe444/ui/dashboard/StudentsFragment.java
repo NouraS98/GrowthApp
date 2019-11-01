@@ -53,7 +53,7 @@ import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS;
 import static sa.ksu.swe444.Constants.keys.CLICKED_STUDENT;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
 
-public class StudentsFragment extends Fragment   implements StudentAdapter.OnItemClickListener{
+public class StudentsFragment extends Fragment implements StudentAdapter.OnItemClickListener {
 
 
     private RecyclerView recyclerView;
@@ -65,14 +65,13 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
     private FirebaseAuth firebaseAuth;
     String userId;
     private FirebaseFirestore fireStore;
-    ArrayList<String> classesIDs  = new ArrayList<>();
+    ArrayList<String> classesIDs = new ArrayList<>();
 
     ArrayList<String> students_in_class_array = new ArrayList<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
 
 
         View root = inflater.inflate(R.layout.fragment_students, container, false);
@@ -185,7 +184,12 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
         String classid = MySharedPreference.getString(getContext(), CLICKED_CLASS, "NONE");
         fireStore.collection("classes").document(classid).collection("class_students")
                 .document(studentID).set(studentData, SetOptions.merge());
-        //documentReference.addSnapshotListener()
+
+        Map<String, Object> classData = new HashMap<>();
+        classData.put("classes",classid);
+        fireStore.collection("students").document(studentID).collection("classes")
+                .document(classid).set(classData, SetOptions.merge());
+
     }
 
 
@@ -217,10 +221,10 @@ public class StudentsFragment extends Fragment   implements StudentAdapter.OnIte
     @Override
     public void onItemClick(String name, String id) {
         Intent intent = new Intent(getContext(), AwardsActivity.class);
-       // intent.putExtra(Constants.keys.title, departmentName);
-        MySharedPreference.putString(getContext(),CLICKED_STUDENT,id);
+        // intent.putExtra(Constants.keys.title, departmentName);
+        MySharedPreference.putString(getContext(), CLICKED_STUDENT, id);
 
-        MySharedPreference.putString(getContext(),"STUDENT_NAME",name);
+        MySharedPreference.putString(getContext(), "STUDENT_NAME", name);
 
         intent.putExtra(CLICKED_CLASS, id);
         startActivity(intent);
