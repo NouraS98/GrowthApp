@@ -9,6 +9,10 @@ tools:showIn="navigation_view">
         android:icon="@drawable/ic_classes"
         android:title="THIS IS PARENT" />
     <item
+        android:id="@+id/posts"
+        android:icon="@drawable/ic_chat"
+        android:title="posts" />
+    <item
         android:id="@+id/nav_chat"
         android:icon="@drawable/ic_chat"
         android:title="@string/chats" />

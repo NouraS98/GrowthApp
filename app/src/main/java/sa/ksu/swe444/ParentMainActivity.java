@@ -33,12 +33,15 @@ import androidx.fragment.app.Fragment;
 
 import sa.ksu.swe444.JavaObjects.Parent;
 import sa.ksu.swe444.JavaObjects.Teacher;
+import sa.ksu.swe444.parent.childrenFragment;
+import sa.ksu.swe444.ui.home.ParentPostFragment;
 
 public class ParentMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    ClassFragment fr1;
+    childrenFragment fr1;
     ProfileFragment fr2;
     ChatFragment fr3;
+    ParentPostFragment fr4;
     private static final String TAG_HOME = "TAG_HOME";
     private static final String TAG_CLASSES = "TAG_CLASSES";
     private NavigationView navigationView;
@@ -50,9 +53,10 @@ public class ParentMainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        fr1 = new ClassFragment();
+        fr1 = new childrenFragment();
         fr2 = new ProfileFragment();
         fr3 = new ChatFragment();
+        fr4 = new ParentPostFragment();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_parent);
         toolbar = findViewById(R.id.toolbar);
@@ -144,6 +148,9 @@ public class ParentMainActivity extends AppCompatActivity
             toolbar.setTitle("Profile");
 
             replaceFragment(fr2, TAG_CLASSES);
+        } else if (id==R.id.posts) {
+            toolbar.setTitle("Posts");
+            replaceFragment(fr4, TAG_CLASSES);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

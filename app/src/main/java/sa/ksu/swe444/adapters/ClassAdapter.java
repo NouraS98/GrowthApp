@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -33,18 +35,33 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.MyViewHolder
         public ImageView thumbnail;
         public RecyclerView recyclerView;
         public  TextView title ;
+        public RelativeLayout rr;
 
 
 
         public MyViewHolder(View view , final OnItemClickListener listener) {
             super(view);
             title =  view.findViewById(R.id.title);
-
             thumbnail = view.findViewById(R.id.departmentImg);
             recyclerView =  view.findViewById(R.id.recycler_view);
+            rr= view.findViewById(R.id.rr);
+
             //todo
 
-            title.setOnClickListener(new View.OnClickListener() {
+            rr.setOnClickListener(new View.OnClickListener() {
+                @Override
+
+                public void onClick(View v) {
+                    String name;
+                    name = departmentList.get(getAdapterPosition()).getName();
+                    String id = departmentList.get(getAdapterPosition()).getId();
+                    listener.onItemClick(name, id);
+
+
+                }
+
+            });
+            thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
 
                 public void onClick(View v) {

@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sa.ksu.swe444.AddChildrenDialog;
 import sa.ksu.swe444.AddStudentDialog;
 import sa.ksu.swe444.AwardsActivity;
 import sa.ksu.swe444.Constants;
@@ -45,6 +46,7 @@ import sa.ksu.swe444.JavaObjects.Class;
 import sa.ksu.swe444.JavaObjects.Post;
 import sa.ksu.swe444.JavaObjects.Student;
 import sa.ksu.swe444.MySharedPreference;
+import sa.ksu.swe444.ParentAwardsActivity;
 import sa.ksu.swe444.R;
 import sa.ksu.swe444.adapters.StudentAdapter;
 
@@ -84,7 +86,7 @@ public class childrenFragment extends Fragment   implements StudentAdapter.OnIte
             @Override
             public void onClick(View view) {
 
-                final AddStudentDialog customDialog = new AddStudentDialog(getActivity());
+                final AddChildrenDialog customDialog = new AddChildrenDialog(getActivity());
                 customDialog.show();
                 customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 create_class = customDialog.findViewById(R.id.btn_add_student);
@@ -227,7 +229,7 @@ public class childrenFragment extends Fragment   implements StudentAdapter.OnIte
 
     @Override
     public void onItemClick(String name, String id) {
-        Intent intent = new Intent(getContext(), AwardsActivity.class);
+        Intent intent = new Intent(getContext(), ParentAwardsActivity.class);
         // intent.putExtra(Constants.keys.title, departmentName);
         MySharedPreference.putString(getContext(),CLICKED_STUDENT,id);
 
