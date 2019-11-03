@@ -34,15 +34,15 @@ import sa.ksu.swe444.JavaObjects.Class;
 import sa.ksu.swe444.JavaObjects.Post;
 import sa.ksu.swe444.MySharedPreference;
 import sa.ksu.swe444.R;
-import sa.ksu.swe444.adapters.RecyclerAdapter;
+import sa.ksu.swe444.adapters.RecyclerAdapterParent;
 
 import static sa.ksu.swe444.Constants.keys.USER_EMAIL;
 
-public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnItemClickListener {
+public class ParentPostFragment extends Fragment implements RecyclerAdapterParent.OnItemClickListener {
 
 
     private RecyclerView mRecyclerView;
-    private RecyclerAdapter mAdapter;
+    private RecyclerAdapterParent mAdapter;
     private ProgressBar mProgressBar;
     private FirebaseStorage mStorage;
     private DatabaseReference mDatabaseRef;
@@ -70,10 +70,6 @@ public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnIt
 
         fab.hide();
 
-//        LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) fab.getLayoutParams();
-//        p.setAnchorId(View.NO_ID);
-//        fab.setLayoutParams(p);
-//        fab.setVisibility(View.GONE);
         mRecyclerView = root.findViewById(R.id.mRecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -82,7 +78,7 @@ public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnIt
         mProgressBar.setVisibility(View.VISIBLE);
 
         mTeachers = new ArrayList<>();
-        mAdapter = new RecyclerAdapter(getContext(), mTeachers);
+        mAdapter = new RecyclerAdapterParent(getContext(), mTeachers);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         Log.d("HELLO", "I'm inside class: ");
@@ -187,28 +183,7 @@ public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnIt
 //        startActivity(intent);
 //    }
 
-    @Override
-    public void onDeleteItemClick(final int position) {
-        Post selectedItem = mTeachers.get(position);
-        final String selectedKey = selectedItem.getKey();
-        final String selectedId = selectedItem.getPostId();
 
-        StorageReference imageRef = mStorage.getReferenceFromUrl(selectedItem.getImageUrl());
-        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                fireStore.collection("posts").document(selectedId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "Item deleted", Toast.LENGTH_SHORT).show();
-                        mTeachers.remove(position);
-                        mAdapter.notifyDataSetChanged();
-                        mProgressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        });
-    }
 //    public void onDestroy() {
 //        super.onDestroy();
 //        mDatabaseRef.removeEventListener(mDBListener);
