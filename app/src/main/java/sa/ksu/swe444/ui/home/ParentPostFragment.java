@@ -1,12 +1,10 @@
 package sa.ksu.swe444.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -36,8 +34,9 @@ import sa.ksu.swe444.JavaObjects.Class;
 import sa.ksu.swe444.JavaObjects.Post;
 import sa.ksu.swe444.MySharedPreference;
 import sa.ksu.swe444.R;
-import sa.ksu.swe444.Upload_post;
 import sa.ksu.swe444.adapters.RecyclerAdapter;
+
+import static sa.ksu.swe444.Constants.keys.USER_EMAIL;
 
 public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnItemClickListener {
 
@@ -49,6 +48,8 @@ public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnIt
     private DatabaseReference mDatabaseRef;
     private ValueEventListener mDBListener;
     private List<Post> mTeachers;
+    private ArrayList<String> classesList = new ArrayList<>();
+    private ArrayList<String> studentsList = new ArrayList<>();
 
     private FirebaseFirestore fireStore;
 
@@ -59,13 +60,13 @@ public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnIt
 
 
         FloatingActionButton fab = root.findViewById(R.id.gotoupload);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getContext(), Upload_post.class);
-                startActivity(i);
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getContext(), Upload_post.class);
+//                startActivity(i);
+//            }
+//        });
 
         fab.hide();
 
@@ -81,78 +82,102 @@ public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnIt
         mProgressBar.setVisibility(View.VISIBLE);
 
         mTeachers = new ArrayList<>();
-        mAdapter = new RecyclerAdapter (getContext(), mTeachers);
+        mAdapter = new RecyclerAdapter(getContext(), mTeachers);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
+        Log.d("HELLO", "I'm inside class: ");
 
         mStorage = FirebaseStorage.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("teachers_uploads");
         ReadPosts();
-
-//        mDBListener = mDatabaseRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                mTeachers.clear();
-//
-//                for (DataSnapshot teacherSnapshot : dataSnapshot.getChildren()) {
-//                    Post upload = teacherSnapshot.getValue(Post.class);
-//                    upload.setKey(teacherSnapshot.getKey());
-//                }
-//                ReadPosts();
-//
-//                mAdapter.notifyDataSetChanged();
-//                mProgressBar.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-//                mProgressBar.setVisibility(View.INVISIBLE);
-//            }
-//        });
+        Log.d("HELLO", "I'm inside class: ");
+        Log.d("HELLO", "IN MAIN the array is " + classesList.toString());
 
         return root;
     }
 
-    public void ReadPosts(){
+
+
+
+    public void ReadPosts() {
+
         fireStore = FirebaseFirestore.getInstance();
-        fireStore.collection("posts")
-                .whereEqualTo("classId", MySharedPreference.getString(getContext(), Constants.keys.CLICKED_CLASS,"NONE"))
+        String USEREMAIL = MySharedPreference.getString(getContext(), USER_EMAIL, null);
+        fireStore.collection("students")
+                .whereEqualTo("parentemail", USEREMAIL)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Class a = new Class(document.get("name").toString(),R.drawable.wooden,document.getId());
-                                Post upload = new Post(document.get("name").toString(),document.get("imageUrl").toString(), document .get("description").toString(), document.get("classId").toString(),document.getId());
-                                mTeachers.add(upload);
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                            }
-                                            mAdapter.notifyDataSetChanged();
-                mProgressBar.setVisibility(View.GONE);
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
-                        }
+                            Log.d("HELLO", "student I'm have documents that match parent id: ");
+                            for (QueryDocumentSnapshot studentDocument : task.getResult()) {
+                                if (!studentsList.contains(studentDocument.getId())) {
+                                    Log.d("HELLO", "student I'm adding it to array: ");
+                                    Log.d("HELLO", studentDocument.getId());
+                                    studentsList.add(studentDocument.getId());
+                                }
 
+                                fireStore.collection("students").document(studentDocument.getId()).collection("classes").get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d("HELLO", "class I have documents of classes: ");
+
+                                                    for (QueryDocumentSnapshot classesDocument : task.getResult()) {
+                                                        if (!classesList.contains(classesDocument.getId())) {
+                                                            Log.d("HELLO", "class I'm adding it to array: ");
+                                                            Log.d("HELLO", classesDocument.getId());
+
+                                                            classesList.add(classesDocument.getId());
+                                                        }
+
+                                                        fireStore.collection("posts").whereEqualTo("classId", classesDocument.getId()).get()
+                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            for (QueryDocumentSnapshot postDocument : task.getResult()) {
+                                                                                Log.d("HELLO", "post I have a result: " + postDocument.get("name"));
+
+                                                                                Post upload = new Post(postDocument.get("name").toString(), postDocument.get("imageUrl").toString(), postDocument.get("description").toString(), postDocument.get("classId").toString(), postDocument.getId());
+                                                                                mTeachers.add(upload);
+                                                                                Log.d("TAG", postDocument.getId() + " => " + postDocument.getData());
+                                                                            }
+                                                                            mAdapter.notifyDataSetChanged();
+                                                                            mProgressBar.setVisibility(View.GONE);
+                                                                        }
+                                                                    }
+                                                                });
+
+                                                    }
+                                                    Log.d("HELLO", "class the array  after for loop is " + classesList.toString());
+
+                                                }
+                                            }
+                                        });
+
+                            }
+                        }
                     }
                 });
     }
 
+
     @Override
     public void onItemClick(int position) {
-        Post clickedTeacher=mTeachers.get(position);
-        String[] teacherData={clickedTeacher.getName(),clickedTeacher.getDescription(),clickedTeacher.getImageUrl()};
-     //   openDetailActivity(teacherData);
+        Post clickedTeacher = mTeachers.get(position);
+        String[] teacherData = {clickedTeacher.getName(), clickedTeacher.getDescription(), clickedTeacher.getImageUrl()};
+        //   openDetailActivity(teacherData);
 
     }
 
     @Override
     public void onShowItemClick(int position) {
-        Post clickedTeacher=mTeachers.get(position);
-        String[] teacherData={clickedTeacher.getName(),clickedTeacher.getDescription(),clickedTeacher.getImageUrl()};
-     //   openDetailActivity(teacherData);
+        Post clickedTeacher = mTeachers.get(position);
+        String[] teacherData = {clickedTeacher.getName(), clickedTeacher.getDescription(), clickedTeacher.getImageUrl()};
+        //   openDetailActivity(teacherData);
     }
 //    private void openDetailActivity(String[] data){
 //        Intent intent = new Intent(this, DetailsActivity.class);
@@ -166,21 +191,21 @@ public class ParentPostFragment extends Fragment implements RecyclerAdapter.OnIt
     public void onDeleteItemClick(final int position) {
         Post selectedItem = mTeachers.get(position);
         final String selectedKey = selectedItem.getKey();
-        final String selectedId= selectedItem.getPostId();
+        final String selectedId = selectedItem.getPostId();
 
         StorageReference imageRef = mStorage.getReferenceFromUrl(selectedItem.getImageUrl());
         imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-               fireStore.collection("posts").document(selectedId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                   @Override
-                   public void onSuccess(Void aVoid) {
-                       Toast.makeText(getContext(), "Item deleted", Toast.LENGTH_SHORT).show();
-                       mTeachers.remove(position);
-                       mAdapter.notifyDataSetChanged();
-                       mProgressBar.setVisibility(View.GONE);
-                   }
-               });
+                fireStore.collection("posts").document(selectedId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getContext(), "Item deleted", Toast.LENGTH_SHORT).show();
+                        mTeachers.remove(position);
+                        mAdapter.notifyDataSetChanged();
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                });
             }
         });
     }

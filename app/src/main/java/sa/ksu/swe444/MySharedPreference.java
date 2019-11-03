@@ -41,6 +41,12 @@ public class MySharedPreference {
         editor.apply();
     }//end of putInt
 
+//    public static void putArray(Context context,String key,String[] value){
+//        SharedPreferences.Editor editor=getInstance(context).edit();
+//        editor.putStringSet(key,value);
+//        editor.apply();
+//    }//end of putInt
+
     public static void putBoolean(Context context,String key,boolean value){
         SharedPreferences.Editor editor=getInstance(context).edit();
         editor.putBoolean(key,value);

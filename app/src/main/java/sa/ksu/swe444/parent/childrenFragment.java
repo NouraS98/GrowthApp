@@ -48,6 +48,7 @@ import sa.ksu.swe444.adapters.StudentAdapter;
 
 import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS;
 import static sa.ksu.swe444.Constants.keys.CLICKED_STUDENT;
+import static sa.ksu.swe444.Constants.keys.USER_EMAIL;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
 
 public class childrenFragment extends Fragment implements StudentAdapter.OnItemClickListener{
@@ -78,62 +79,63 @@ public class childrenFragment extends Fragment implements StudentAdapter.OnItemC
         adapter = new StudentAdapter(getContext(), albumList);
 
         FloatingActionButton fab = root.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final AddChildrenDialog customDialog = new AddChildrenDialog(getActivity());
-                customDialog.show();
-                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                create_class = customDialog.findViewById(R.id.btn_add_student);
-                studentcode = customDialog.findViewById(R.id.student_email_dlg);
-                create_class.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        // Add an item to animals list
-                        if (studentcode.getText().toString().equals("") || studentcode.getText().toString().trim().equals("")) {
-//                            customDialog.dismiss();
-                            // showDialog("Class can't have an empty name!");
-                        } else {
-
-                            final String studentID = studentcode.getText().toString();
-
-                            fireStore = FirebaseFirestore.getInstance();
-                            String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
-
-                            if (USERID != null) {
-                                DocumentReference docRef = fireStore.collection("students").document(studentID);
-                                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if (documentSnapshot.exists()) {
-
-                                            Student a = new Student(documentSnapshot.get("parentemail").toString(), documentSnapshot.get("name").toString(), R.drawable.apple);
-
-                                            addStudentClassToParent(studentID);
-
-                                            albumList.add(a);
-                                            adapter.notifyItemInserted(++position);
-                                            recyclerView.scrollToPosition(position);
-                                            customDialog.dismiss();
-
-                                        } else {
-                                            showDialog("Student is not registered in our system, please contact the school.");
-                                        }//end if exists
-                                    }
-                                });
-
-                            } else {
-                                //showDialog("User not found. Error");
-                            }
-                        }//end else not empty student fields
-
-                    }
-                });
-
-            }
-        });
+        fab.hide();
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                final AddChildrenDialog customDialog = new AddChildrenDialog(getActivity());
+//                customDialog.show();
+//                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                create_class = customDialog.findViewById(R.id.btn_add_student);
+//                studentcode = customDialog.findViewById(R.id.student_email_dlg);
+//                create_class.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        // Add an item to animals list
+//                        if (studentcode.getText().toString().equals("") || studentcode.getText().toString().trim().equals("")) {
+////                            customDialog.dismiss();
+//                            // showDialog("Class can't have an empty name!");
+//                        } else {
+//
+//                            final String studentID = studentcode.getText().toString();
+//
+//                            fireStore = FirebaseFirestore.getInstance();
+//                            String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
+//
+//                            if (USERID != null) {
+//                                DocumentReference docRef = fireStore.collection("students").document(studentID);
+//                                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                    @Override
+//                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                        if (documentSnapshot.exists()) {
+//
+//                                            Student a = new Student(documentSnapshot.get("parentemail").toString(), documentSnapshot.get("name").toString(), R.drawable.apple);
+//
+//                                            addStudentClassToParent(studentID);
+//
+//                                            albumList.add(a);
+//                                            adapter.notifyItemInserted(++position);
+//                                            recyclerView.scrollToPosition(position);
+//                                            customDialog.dismiss();
+//
+//                                        } else {
+//                                            showDialog("Student is not registered in our system, please contact the school.");
+//                                        }//end if exists
+//                                    }
+//                                });
+//
+//                            } else {
+//                                //showDialog("User not found. Error");
+//                            }
+//                        }//end else not empty student fields
+//
+//                    }
+//                });
+//
+//            }
+//        });
 
 //
 //        adapter.setOnItemClickListener(new StudentAdapter.OnItemClickListener() {
@@ -241,51 +243,80 @@ public class childrenFragment extends Fragment implements StudentAdapter.OnItemC
     public void ReadStudents() {
         String classID = MySharedPreference.getString(getContext(), CLICKED_CLASS, "NONE");
         fireStore = FirebaseFirestore.getInstance();
-        String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
-        fireStore.collection("classes").document(classID).collection("class_students").get()
+        String USEREMAIL = MySharedPreference.getString(getContext(), USER_EMAIL, null);
+
+        fireStore.collection("students")
+                .whereEqualTo("parentemail", USEREMAIL)
+                .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document != null) {
-                                    students_in_class_array.add(document.get("studentId").toString());
-                                    fireStore.collection("students").document(document.get("studentId").toString()).get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Student a = new Student(task.getResult().get("parentemail").toString(), task.getResult().get("name").toString(), R.drawable.apple);
-                                                        a.setId(task.getResult().getId());
-                                                        albumList.add(a);
-                                                        adapter.notifyItemInserted(++position);
-                                                        recyclerView.scrollToPosition(position);
-                                                        adapter.notifyDataSetChanged();
-                                                    } else {
-
-                                                    }//end else successfull
-                                                }//end oncomplete task
-                                            });// end firestore collection get
-                                    Log.d("TAG", "students list: " + students_in_class_array.toString());
-
-                                } else {
-                                    //doc is null
-                                }
-//                                    Log.d("TAG", "it is null :", task.getException());
-//
-//                                    return;
-//                                }
-//                                Student a = new Student(document.get("parentemail").toString(), document.get("name").toString(), R.drawable.flower);
+                                Student a = new Student(document.get("parentemail").toString(), document.get("name").toString(), R.drawable.apple);
+                                a.setId(document.getId());
+                                albumList.add(a);
+                                adapter.notifyItemInserted(++position);
+                                recyclerView.scrollToPosition(position);
+                                adapter.notifyDataSetChanged();
+//                                Class a = new Class(document.get("name").toString(),R.drawable.wooden,document.getId());
 //                                albumList.add(a);
 //                                adapter.notifyItemInserted(++position);
 //                                recyclerView.scrollToPosition(position);
 //                                adapter.notifyDataSetChanged();
+//
+//                                Log.d("TAG", document.getId() + " => " + document.getData());
                             }
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
                     }
                 });
+
+//        fireStore.collection("students").document(classID).collection("class_students").get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                if (document != null) {
+//                                    students_in_class_array.add(document.get("studentId").toString());
+//                                    fireStore.collection("students").document(document.get("studentId").toString()).get()
+//                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                                @Override
+//                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                                    if (task.isSuccessful()) {
+//                                                        Student a = new Student(task.getResult().get("parentemail").toString(), task.getResult().get("name").toString(), R.drawable.apple);
+//                                                        a.setId(task.getResult().getId());
+//                                                        albumList.add(a);
+//                                                        adapter.notifyItemInserted(++position);
+//                                                        recyclerView.scrollToPosition(position);
+//                                                        adapter.notifyDataSetChanged();
+//                                                    } else {
+//
+//                                                    }//end else successfull
+//                                                }//end oncomplete task
+//                                            });// end firestore collection get
+//                                    Log.d("TAG", "students list: " + students_in_class_array.toString());
+//
+//                                } else {
+//                                    //doc is null
+//                                }
+////                                    Log.d("TAG", "it is null :", task.getException());
+////
+////                                    return;
+////                                }
+////                                Student a = new Student(document.get("parentemail").toString(), document.get("name").toString(), R.drawable.flower);
+////                                albumList.add(a);
+////                                adapter.notifyItemInserted(++position);
+////                                recyclerView.scrollToPosition(position);
+////                                adapter.notifyDataSetChanged();
+//                            }
+//                        } else {
+//                            Log.d("TAG", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
 
     }
 
