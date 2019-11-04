@@ -179,6 +179,8 @@ public class StudentsFragment extends Fragment implements StudentAdapter.OnItemC
 
     private void addToClassInFirestore(String studentID) {
         fireStore = FirebaseFirestore.getInstance();
+        String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
+
         Map<String, Object> studentData = new HashMap<>();
         studentData.put("studentId", studentID);
         String classid = MySharedPreference.getString(getContext(), CLICKED_CLASS, "NONE");
@@ -187,6 +189,7 @@ public class StudentsFragment extends Fragment implements StudentAdapter.OnItemC
 
         Map<String, Object> classData = new HashMap<>();
         classData.put("classes",classid);
+        classData.put("teacherID",USERID);
         fireStore.collection("students").document(studentID).collection("classes")
                 .document(classid).set(classData, SetOptions.merge());
 

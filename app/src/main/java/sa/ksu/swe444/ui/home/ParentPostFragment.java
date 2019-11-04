@@ -165,7 +165,7 @@ public class ParentPostFragment extends Fragment implements RecyclerAdapterParen
     public void onItemClick(int position) {
         Post clickedTeacher = mTeachers.get(position);
         String[] teacherData = {clickedTeacher.getName(), clickedTeacher.getDescription(), clickedTeacher.getImageUrl()};
-        //   openDetailActivity(teacherData);
+        //openDetailActivity(teacherData);
 
     }
 

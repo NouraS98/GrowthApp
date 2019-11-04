@@ -43,11 +43,11 @@ public class LoginSignUpActivity extends BaseActivity {
         });
     }//End init()
 
-    private void initToolbar() {
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setTitle(getString(R.string.growth));
-
-    }//End initToolbar()
+//    private void initToolbar() {
+//        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        setTitle(getString(R.string.growth));
+//
+//    }//End initToolbar()
 
 }//End class

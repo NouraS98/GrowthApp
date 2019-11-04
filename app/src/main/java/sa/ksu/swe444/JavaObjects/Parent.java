@@ -9,6 +9,16 @@ public class Parent extends User{
     String phone;
     String nationalID;
     String gender;
+    String id;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Parent() {
     }
@@ -20,12 +30,12 @@ public class Parent extends User{
         this.phone = phone;
     }
 
-    public Parent(String firstName, String lastName, String email, String phone, String nationalID) {
+    public Parent(String firstName, String lastName, String email, String phone, String id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.nationalID = nationalID;
+        this.id = id;
     }
 
     public String getFirstName() {

@@ -64,6 +64,7 @@ public class ProfileFragment extends Fragment {
         initViews();
         executeGetProfileSetting();
 
+        //getActivity().getActionBar().setTitle("Profile");
 
         return v;
 

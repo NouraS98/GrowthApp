@@ -40,6 +40,7 @@ import sa.ksu.swe444.JavaObjects.Class;
 import sa.ksu.swe444.adapters.ClassAdapter;
 
 import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS;
+import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS_NAME;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
 
 
@@ -58,6 +59,7 @@ public class ClassFragment extends Fragment   implements ClassAdapter.OnItemClic
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
 
+        //getActivity().getActionBar().setTitle("Classes");
 
         albumList = new ArrayList<Class>();
         adapter = new ClassAdapter(getContext(), albumList);
@@ -116,7 +118,8 @@ public class ClassFragment extends Fragment   implements ClassAdapter.OnItemClic
     public void onClassSelect(String departmentName, String id) {
         Intent intent = new Intent(getContext(), ClassMainActivity.class);
         intent.putExtra(Constants.keys.title, departmentName);
-         MySharedPreference.putString(getContext(),CLICKED_CLASS,id);
+        MySharedPreference.putString(getContext(),CLICKED_CLASS_NAME,departmentName);
+        MySharedPreference.putString(getContext(),CLICKED_CLASS,id);
 
         intent.putExtra(CLICKED_CLASS, id);
         startActivity(intent);

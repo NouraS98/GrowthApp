@@ -33,12 +33,14 @@ import androidx.fragment.app.Fragment;
 
 import sa.ksu.swe444.JavaObjects.Parent;
 import sa.ksu.swe444.JavaObjects.Teacher;
+import sa.ksu.swe444.ui.dashboard.ContactsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ClassFragment fr1;
     ProfileFragment fr2;
-    ChatFragment fr3;
+    ContactsFragment fr3;
+    //ChatFragment fr3;
     private static final String TAG_HOME = "TAG_HOME";
     private static final String TAG_CLASSES = "TAG_CLASSES";
     private NavigationView navigationView;
@@ -52,11 +54,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         fr1 = new ClassFragment();
         fr2 = new ProfileFragment();
-        fr3 = new ChatFragment();
+        fr3 = new ContactsFragment();
+        //fr3 = new ChatFragment();
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Classes");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -75,9 +82,9 @@ public class MainActivity extends AppCompatActivity
 //            //ReadSingleParent();
 ////            replaceFragment(fr1, TAG_CLASSES);
 //        }
-
+        navigationView.getMenu().getItem(0).setChecked(true);
         replaceFragment(fr1, TAG_CLASSES);
-        toolbar.setTitle("My Classes");
+        toolbar.setTitle("Classes");
         ProfileInfo();
     }
 
@@ -96,7 +103,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+//            super.onBackPressed();
+//            finish();
         }
     }
 
@@ -129,7 +137,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_classes) {
-            toolbar.setTitle("My Classes");
+            toolbar.setTitle("Classes");
             replaceFragment(fr1, TAG_CLASSES);
 
         } else if (id == R.id.nav_chat) {

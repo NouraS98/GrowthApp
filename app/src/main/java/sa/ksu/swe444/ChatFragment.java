@@ -17,5 +17,7 @@ public class ChatFragment extends Fragment {
 
         return v;
 
+
+
     }//end onCreateView
 }

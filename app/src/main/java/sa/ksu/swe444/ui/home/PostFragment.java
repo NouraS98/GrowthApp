@@ -32,9 +32,11 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import sa.ksu.swe444.ClassMainActivity;
 import sa.ksu.swe444.Constants;
 import sa.ksu.swe444.JavaObjects.Class;
 import sa.ksu.swe444.JavaObjects.Post;
+import sa.ksu.swe444.MainActivity;
 import sa.ksu.swe444.MySharedPreference;
 import sa.ksu.swe444.R;
 import sa.ksu.swe444.Upload_post;
@@ -68,7 +70,6 @@ public class PostFragment extends Fragment implements RecyclerAdapter.OnItemClic
                 startActivity(i);
             }
         });
-
 
         mRecyclerView = root.findViewById(R.id.mRecyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -111,6 +112,7 @@ public class PostFragment extends Fragment implements RecyclerAdapter.OnItemClic
 
         return root;
     }
+
 
     public void ReadPosts(){
         fireStore = FirebaseFirestore.getInstance();
