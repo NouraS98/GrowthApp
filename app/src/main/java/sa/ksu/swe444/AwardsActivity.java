@@ -50,6 +50,7 @@ public class AwardsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_awards);
+        initToolbar();
 
         studentID = MySharedPreference.getString(getApplicationContext(), Constants.keys.CLICKED_STUDENT, "NONE");
 
@@ -238,6 +239,14 @@ public class AwardsActivity extends AppCompatActivity {
         }); //end on click
     }
 
+    private void initToolbar() {
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+    }//End initToolbar()
+
     public void readAwards() {
         fireStore = FirebaseFirestore.getInstance();
         String USERID = MySharedPreference.getString(getApplicationContext(), USER_ID, null);
@@ -297,5 +306,15 @@ public class AwardsActivity extends AppCompatActivity {
 //        documentReference.update("points", FieldValue.increment(1));
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
 }

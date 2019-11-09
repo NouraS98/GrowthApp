@@ -144,6 +144,7 @@ public class ClassFragment extends Fragment   implements ClassAdapter.OnItemClic
 
     }
 
+
     private void prepareClasses() {
         int[] covers = new int[]{
                 R.drawable.butterfly,

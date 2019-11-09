@@ -19,7 +19,7 @@ public class Constants {
         final String sectionType = "sectionType";
         String CLICKED_CLASS = "CLICKED_CLASS";
         String CLICKED_CLASS_NAME = "CLICKED_CLASS_NAME";
-
         String CLICKED_STUDENT = "CLICKED_STUDENT" ;
+        String CLICKED_PARENT = "CLICKED_PARENT";
     }
 }

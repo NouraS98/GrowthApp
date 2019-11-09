@@ -36,12 +36,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import sa.ksu.swe444.AddStudentDialog;
 import sa.ksu.swe444.AwardsActivity;
 import sa.ksu.swe444.ClassMainActivity;
 import sa.ksu.swe444.Constants;
 import sa.ksu.swe444.JavaObjects.Class;
+import sa.ksu.swe444.JavaObjects.Contact;
 import sa.ksu.swe444.JavaObjects.Student;
 import sa.ksu.swe444.LoginActivity;
 import sa.ksu.swe444.MainActivity;
@@ -116,7 +118,8 @@ public class StudentsFragment extends Fragment implements StudentAdapter.OnItemC
                                             Student a = new Student(documentSnapshot.get("parentemail").toString(), documentSnapshot.get("name").toString(), R.drawable.apple);
                                             albumList.add(a);
 
-                                            addToClassInFirestore(documentSnapshot.getId());
+                                            addToClassInFirestore(documentSnapshot.getId(), documentSnapshot.get("name").toString(), documentSnapshot.get("parentemail").toString());
+                                            addContacts(a);
                                             adapter.notifyItemInserted(++position);
                                             recyclerView.scrollToPosition(position);
                                             customDialog.dismiss();
@@ -161,6 +164,24 @@ public class StudentsFragment extends Fragment implements StudentAdapter.OnItemC
         return root;
     }
 
+    private void addContacts(Student a) {
+        fireStore = FirebaseFirestore.getInstance();
+        String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
+
+        Contact contact = new Contact(USERID, a.getEmail(), a.getFullName());
+        String contactid = MySharedPreference.getString(getContext(), USER_ID, null) + a.getEmail();
+        contact.setContactID(contactid);
+
+        fireStore.collection("contacts").document(contactid).set(contact)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                });
+
+    }
+
     private boolean StudentInClass(String studentID) {
         String classID = MySharedPreference.getString(getContext(), CLICKED_CLASS, "NONE");
         final DocumentReference docRef = fireStore.collection("classes").document(classID);
@@ -177,20 +198,22 @@ public class StudentsFragment extends Fragment implements StudentAdapter.OnItemC
         return false;
     }
 
-    private void addToClassInFirestore(String studentID) {
+    private void addToClassInFirestore(String Id, String name, String parentemail) {
         fireStore = FirebaseFirestore.getInstance();
         String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
 
         Map<String, Object> studentData = new HashMap<>();
-        studentData.put("studentId", studentID);
+        studentData.put("studentId", Id);
+        studentData.put("studentname", name);
+        studentData.put("parentemail", parentemail);
         String classid = MySharedPreference.getString(getContext(), CLICKED_CLASS, "NONE");
         fireStore.collection("classes").document(classid).collection("class_students")
-                .document(studentID).set(studentData, SetOptions.merge());
+                .document(Id).set(studentData, SetOptions.merge());
 
         Map<String, Object> classData = new HashMap<>();
         classData.put("classes",classid);
         classData.put("teacherID",USERID);
-        fireStore.collection("students").document(studentID).collection("classes")
+        fireStore.collection("students").document(Id).collection("classes")
                 .document(classid).set(classData, SetOptions.merge());
 
     }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import sa.ksu.swe444.Constants;
+import sa.ksu.swe444.JavaObjects.Contact;
 import sa.ksu.swe444.JavaObjects.Parent;
 import sa.ksu.swe444.JavaObjects.Student;
 import sa.ksu.swe444.MySharedPreference;
@@ -21,7 +22,7 @@ import sa.ksu.swe444.R;
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Parent> departmentList;
+    private List<Contact> departmentList;
 
     private OnItemClickListener mListener;
 
@@ -48,10 +49,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
                 public void onClick(View v) {
                     String name;
-                    name = departmentList.get(getAdapterPosition()).getFirstName()+" "+departmentList.get(getAdapterPosition()).getLastName();
-                    String id = departmentList.get(getAdapterPosition()).getId();
+                    name = departmentList.get(getAdapterPosition()).getStudentName();
+                    String email = departmentList.get(getAdapterPosition()).getParentEmail();
                     if(listener!=null)
-                    listener.onItemClick(name, id);
+                    listener.onItemClick(name, email);
 
                 }
 
@@ -61,7 +62,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         } //end MyViewHolder
 
     }
-    public ContactsAdapter(Context mContext, List<Parent> departmentList) {
+    public ContactsAdapter(Context mContext, List<Contact> departmentList) {
         this.mContext = mContext;
         this.departmentList = departmentList;
     } // end ClassAdapter
@@ -76,16 +77,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Parent album = departmentList.get(position);
+        Contact album = departmentList.get(position);
         if(MySharedPreference.getString(mContext , Constants.keys.APP_LANGUAGE,"en").equals("en")) {
-            holder.name.setText(departmentList.get(position).getFirstName()+" "+departmentList.get(position).getLastName());
-            holder.email.setText(departmentList.get(position).getEmail());
+            holder.name.setText(departmentList.get(position).getStudentName());
+            holder.email.setText(departmentList.get(position).getParentEmail());
 
 
         }else{
-            holder.name.setText(departmentList.get(position).getFirstName()+" "+departmentList.get(position).getLastName());
+            holder.name.setText(departmentList.get(position).getStudentName());
 
-            holder.email.setText(departmentList.get(position).getEmail());
+            holder.email.setText(departmentList.get(position).getParentEmail());
         }
 //        holder.thumbnail.setImageResource(departmentList.get(position).getImg());
         // loading album cover using Glide library

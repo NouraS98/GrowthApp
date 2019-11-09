@@ -71,7 +71,7 @@ public class Upload_post extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_upload_post );
-
+        initToolbar();
         chooseImageBtn = findViewById(R.id.button_choose_image);
         uploadBtn = findViewById(R.id.uploadBtn);
         nameEditText = findViewById(R.id.nameEditText);
@@ -105,6 +105,15 @@ public class Upload_post extends BaseActivity {
             }
         });
     }
+
+    private void initToolbar() {
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+    }//End initToolbar()
+
     private void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -207,6 +216,17 @@ public class Upload_post extends BaseActivity {
         Intent intent = new Intent(this, ClassMainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 

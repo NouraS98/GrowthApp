@@ -10,5 +10,8 @@
     <color name="colorPink">#FA9AC7</color>
     <color name="colorBlue">#76DFFF</color>
     <color name="colorLightYellow">#fff3b8</color>
+    <color name="colorBabyBlue">#b2edff</color>
+    <color name="colorBabyPink">#ffd0e6</color>
+    <color name="colorBabyGreen">#d8eea6</color>
 
 </resources>

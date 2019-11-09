@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 
 import sa.ksu.swe444.AwardsActivity;
+import sa.ksu.swe444.ChatActivity;
+import sa.ksu.swe444.JavaObjects.Contact;
 import sa.ksu.swe444.JavaObjects.Parent;
 import sa.ksu.swe444.JavaObjects.Student;
 import sa.ksu.swe444.MySharedPreference;
@@ -43,6 +45,7 @@ import sa.ksu.swe444.R;
 import sa.ksu.swe444.adapters.ContactsAdapter;
 
 import static sa.ksu.swe444.Constants.keys.CLICKED_CLASS;
+import static sa.ksu.swe444.Constants.keys.CLICKED_PARENT;
 import static sa.ksu.swe444.Constants.keys.CLICKED_STUDENT;
 import static sa.ksu.swe444.Constants.keys.USER_ID;
 
@@ -51,7 +54,7 @@ public class ContactsFragment extends Fragment implements ContactsAdapter.OnItem
 
     private RecyclerView recyclerView;
     private ContactsAdapter adapter;
-    private List<Parent> albumList;
+    private List<Contact> albumList;
     Button create_class;
     TextView studentcode;
     int position = 4;
@@ -59,8 +62,11 @@ public class ContactsFragment extends Fragment implements ContactsAdapter.OnItem
     String userId;
     private FirebaseFirestore fireStore;
     ArrayList<String> classesIDs = new ArrayList<>();
-
-    ArrayList<String> students_in_class_array = new ArrayList<>();
+    String stdname;
+    String parentemail;
+    String teacherid;
+    ArrayList<String> studentsparent = new ArrayList<>();
+    ArrayList<String> teacherclasses = new ArrayList<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -217,13 +223,12 @@ public class ContactsFragment extends Fragment implements ContactsAdapter.OnItem
 
     @Override
     public void onItemClick(String name, String id) {
-        Intent intent = new Intent(getContext(), AwardsActivity.class);
+        Intent intent = new Intent(getContext(), ChatActivity.class);
         // intent.putExtra(Constants.keys.title, departmentName);
-        MySharedPreference.putString(getContext(), CLICKED_STUDENT, id);
+        MySharedPreference.putString(getContext(), CLICKED_PARENT, id);
 
-        MySharedPreference.putString(getContext(), "STUDENT_NAME", name);
+        MySharedPreference.putString(getContext(), CLICKED_STUDENT, name);
 
-        intent.putExtra(CLICKED_CLASS, id);
         startActivity(intent);
     }
 
@@ -275,128 +280,223 @@ public class ContactsFragment extends Fragment implements ContactsAdapter.OnItem
 
     public void ReadParents() {
 
+
         String classID = MySharedPreference.getString(getContext(), CLICKED_CLASS, "NONE");
         fireStore = FirebaseFirestore.getInstance();
         final String USERID = MySharedPreference.getString(getContext(), USER_ID, null);
 
-//        fireStore.collection("students").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot studentsdocument : task.getResult()) {
-//                        studentname = studentsdocument.get("name").toString();
-//                        parentemail = studentsdocument.get("parentemail").toString();
-//                        fireStore.collection("students").document(studentsdocument.getId()).collection("classes")
-//                                .whereEqualTo("teacherID", USERID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                if(task.isSuccessful()){
-//                                    Parent p = new Parent();
-//                                    p.setEmail(parentemail);
-//                                    p.setFirstName("f");
-//                                    p.setLastName("l");
-//                                    albumList.add(p);
-//                                    adapter.notifyItemInserted(++position);
-//                                    recyclerView.scrollToPosition(position);
-//                                    adapter.notifyDataSetChanged();
-//                                }
-//
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        });
+//        ArrayList<String> studentsparent = new ArrayList<>();
+//        ArrayList<String> teacherclasses = new ArrayList<>();
 
-//        fireStore.collection("classes").whereEqualTo("teacher", USERID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        fireStore.collection("contacts").whereEqualTo("teacherID",USERID)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(QueryDocumentSnapshot contactdocument : task.getResult()){
+                    Contact c = new Contact(contactdocument.get("teacherID").toString(), contactdocument.get("parentEmail").toString(), contactdocument.get("studentName").toString()+"'s parent");
+                    c.setContactID(contactdocument.getId());
+                    albumList.add(c);
+                    adapter.notifyItemInserted(++position);
+                    recyclerView.scrollToPosition(albumList.size() - 1);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+//        fireStore.collection("classes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 //            @Override
 //            public void onComplete(@NonNull Task<QuerySnapshot> task) {
 //                if (task.isSuccessful()) {
 //                    for (QueryDocumentSnapshot classesdocument : task.getResult()) {
-//                        fireStore.collection("classes").document(classesdocument.getId()).collection("class_students").get()
-//                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                        if (task.isSuccessful()) {
-//                                            for (final QueryDocumentSnapshot studentsdocument : task.getResult()) {
-//                                                fireStore.collection("students").document(studentsdocument.getId()).get()
-//                                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                                            @Override
-//                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                                                fireStore.collection("parents").whereEqualTo("email", studentsdocument.get("parentemail").toString()).get()
-//                                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                                                            @Override
-//                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                                                if (task.isSuccessful()){
-//                                                                                    for (QueryDocumentSnapshot parentdocument : task.getResult()) {
-//                                                                                        Log.d("MOM", "parents list: " + parentdocument.toString());
-////                                                                                        String parentFname = parentdocument.get("firstName").toString();
-////                                                                                        String parentLname = parentdocument.get("lastName").toString();
-////                                                                                        String parentphone = parentdocument.get("phone").toString();
-//                                                                                        Parent p = new Parent(parentdocument.get("firstName").toString(), parentdocument.get("lastName").toString(), parentdocument.get("email").toString(), parentdocument.get("phone").toString(), parentdocument.getId());
-//                                                                                        albumList.add(p);
-//                                                                                        adapter.notifyItemInserted(++position);
-//                                                                                        recyclerView.scrollToPosition(position);
-//                                                                                        adapter.notifyDataSetChanged();
-//                                                                                    }
-//                                                                                }
-//                                                                            }
-//                                                                        });
-//                                                            }
-//                                                        });
-//                                            }
-//                                        }
-//                                    }
-//                                });
+//                        teacherid = classesdocument.get("teacher").toString();
+//                        if (teacherid.equals(USERID)) {
+//                            teacherclasses.add(classesdocument.getId());
+//                            Log.d("CONTACTS", "found id ****** " + classesdocument.getId());
+//                        }
 //                    }
 //                }
 //            }
 //        });
 
-//        fireStore.collection("classes").document(classID).collection("class_students").get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                if (document != null) {
-//                                    students_in_class_array.add(document.get("studentId").toString());
-//                                    fireStore.collection("students").document(document.get("studentId").toString()).get()
-//                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                                    if (task.isSuccessful()) {
-//                                                        Student a = new Student(task.getResult().get("parentemail").toString(), task.getResult().get("name").toString(), R.drawable.apple);
-//                                                        a.setId(task.getResult().getId());
-//                                                        albumList.add(a);
-//                                                        adapter.notifyItemInserted(++position);
-//                                                        recyclerView.scrollToPosition(position);
-//                                                        adapter.notifyDataSetChanged();
-//                                                    } else {
+////        defaultStore?.collection("Category").document("Film").collection("firstFilm").getDocuments()
 //
-//                                                    }//end else successfull
-//                                                }//end oncomplete task
-//                                            });// end firestore collection get
-//                                    Log.d("TAG", "students list: " + students_in_class_array.toString());
+//        for (int i = 0; i < teacherclasses.size(); i++) {
+//            String s = teacherclasses.get(i);
+////            String s = "a7d1337f-55e2-4a25-bc92-4f63d803eef8";
 //
-//                                } else {
-//                                    //doc is null
+//            Log.d("CONTACTS", "inside for loop ****** " + s);
+//            fireStore.collection("classes").document(s).collection("class_students").get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                Log.d("CONTACTS", "inside if success ****** ");
+//                                for (QueryDocumentSnapshot studentsdocument : task.getResult()) {
+////                                  studentname = studentsdocument.getId().toString();
+//                                    if (studentsdocument.get("studentname") != null)
+//                                        stdname = studentsdocument.get("studentname").toString();
+//                                    else
+//                                        continue;
+//                                    if (studentsdocument.get("parentemail") != null)
+//                                        parentemail = studentsdocument.get("parentemail").toString();
+//                                    else
+//                                        continue;
+//                                    Log.d("CONTACTS", "inside for stidentsDoc ****** " + stdname);
+//                                    Parent p = new Parent();
+//                                    p.setEmail(parentemail);
+//                                    p.setFirstName(stdname+"'s");
+//                                    p.setLastName("parent");
+//                                    albumList.add(p);
+//                                    adapter.notifyItemInserted(++position);
+//                                    recyclerView.scrollToPosition(albumList.size()-1);
+//                                    adapter.notifyDataSetChanged();
+////                            if(!studentsparent.contains(studentname))
+////                                studentsparent.add(studentname);
 //                                }
-////                                    Log.d("TAG", "it is null :", task.getException());
-////
-////                                    return;
-////                                }
-////                                Student a = new Student(document.get("parentemail").toString(), document.get("name").toString(), R.drawable.flower);
-////                                albumList.add(a);
-////                                adapter.notifyItemInserted(++position);
-////                                recyclerView.scrollToPosition(position);
-////                                adapter.notifyDataSetChanged();
 //                            }
-//                        } else {
-//                            Log.d("TAG", "Error getting documents: ", task.getException());
+//                        }
+//                    });
+//        }
+//        adapter.notifyItemInserted(++position);
+//        recyclerView.scrollToPosition(position);
+//        adapter.notifyDataSetChanged();
+//        fireStore.collection("students").document().get()
+//        fireStore.collection("students").document(studentsdocument.getId()).collection("classes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    if (task.isSuccessful())
+//                }
+//            }
+//});
+
+
+//            fireStore.collection("students").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        for (QueryDocumentSnapshot studentsdocument : task.getResult()) {
+//
+//                            Student s = new Student(studentsdocument.get("parentemail").toString(), studentsdocument.get("name").toString() )
+//                            studentsparent.add()
+//                            studentname = studentsdocument.get("name").toString();
+//                            parentemail = studentsdocument.get("parentemail").toString();
+//                            Log.d("CONTACTS", "inside for stidentsDoc ****** " + studentname); //THIS
+////
+//                            fireStore.collection("students").document(studentsdocument.getId()).collection("classes")
+//                                    .whereEqualTo("teacherID", USERID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                    if(task.isSuccessful()){
+//                                        Log.d("CONTACTS", "inside where equals"); //THIS
+//                                        Log.d("CONTACTS", "***** " + studentname); //THIS
+//                                        Parent p = new Parent();
+//                                        p.setEmail(parentemail);
+//                                        p.setFirstName("f");
+//                                        p.setLastName("l");
+//                                        albumList.add(p);
+//                                        adapter.notifyItemInserted(++position);
+//                                        recyclerView.scrollToPosition(position);
+//                                        adapter.notifyDataSetChanged();
+//                                    }
+//
+//                                }
+//                            });
 //                        }
 //                    }
-//                });
+//                }
+//            });
+        //
+        //        fireStore.collection("classes").whereEqualTo("teacher", USERID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //            @Override
+        //            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        //                if (task.isSuccessful()) {
+        //                    for (QueryDocumentSnapshot classesdocument : task.getResult()) {
+        //                        fireStore.collection("classes").document(classesdocument.getId()).collection("class_students").get()
+        //                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //                                    @Override
+        //                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        //                                        if (task.isSuccessful()) {
+        //                                            for (final QueryDocumentSnapshot studentsdocument : task.getResult()) {
+        //                                                Log.d("STUDENTS", "inside for stidentsDoc ****** " + studentsdocument.getId()); //THIS
+        //
+        //                                                fireStore.collection("students").document(studentsdocument.getId()).get()
+        //                                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        //                                                            @Override
+        //                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        //                                                                fireStore.collection("parents").whereEqualTo("email", studentsdocument.get("parentemail").toString()).get()
+        //                                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //                                                                            @Override
+        //                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        //                                                                                if (task.isSuccessful()){
+        //                                                                                    for (QueryDocumentSnapshot parentdocument : task.getResult()) {
+        //                                                                                        Log.d("MOM", "parents list: " + parentdocument.toString());
+        ////                                                                                        String parentFname = parentdocument.get("firstName").toString();
+        ////                                                                                        String parentLname = parentdocument.get("lastName").toString();
+        ////                                                                                        String parentphone = parentdocument.get("phone").toString();
+        //                                                                                        Parent p = new Parent(parentdocument.get("firstName").toString(), parentdocument.get("lastName").toString(), parentdocument.get("email").toString(), parentdocument.get("phone").toString(), parentdocument.getId());
+        //                                                                                        albumList.add(p);
+        //                                                                                        adapter.notifyItemInserted(++position);
+        //                                                                                        recyclerView.scrollToPosition(position);
+        //                                                                                        adapter.notifyDataSetChanged();
+        //                                                                                    }
+        //                                                                                }
+        //                                                                            }
+        //                                                                        });
+        //                                                            }
+        //                                                        });
+        //                                            }
+        //                                        }
+        //                                    }
+        //                                });
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //        fireStore.collection("classes").document(classID).collection("class_students").get()
+        //                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //                    @Override
+        //                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        //                        if (task.isSuccessful()) {
+        //                            for (QueryDocumentSnapshot document : task.getResult()) {
+        //                                if (document != null) {
+        //                                    students_in_class_array.add(document.get("studentId").toString());
+        //                                    fireStore.collection("students").document(document.get("studentId").toString()).get()
+        //                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        //                                                @Override
+        //                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        //                                                    if (task.isSuccessful()) {
+        //                                                        Student a = new Student(task.getResult().get("parentemail").toString(), task.getResult().get("name").toString(), R.drawable.apple);
+        //                                                        a.setId(task.getResult().getId());
+        //                                                        albumList.add(a);
+        //                                                        adapter.notifyItemInserted(++position);
+        //                                                        recyclerView.scrollToPosition(position);
+        //                                                        adapter.notifyDataSetChanged();
+        //                                                    } else {
+        //
+        //                                                    }//end else successfull
+        //                                                }//end oncomplete task
+        //                                            });// end firestore collection get
+        //                                    Log.d("TAG", "students list: " + students_in_class_array.toString());
+        //
+        //                                } else {
+        //                                    //doc is null
+        //                                }
+        ////                                    Log.d("TAG", "it is null :", task.getException());
+        ////
+        ////                                    return;
+        ////                                }
+        ////                                Student a = new Student(document.get("parentemail").toString(), document.get("name").toString(), R.drawable.flower);
+        ////                                albumList.add(a);
+        ////                                adapter.notifyItemInserted(++position);
+        ////                                recyclerView.scrollToPosition(position);
+        ////                                adapter.notifyDataSetChanged();
+        //                            }
+        //                        } else {
+        //                            Log.d("TAG", "Error getting documents: ", task.getException());
+        //                        }
+        //                    }
+        //                });
 
     }
 
